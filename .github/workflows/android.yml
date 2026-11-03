@@ -1,0 +1,43 @@
+name: Android build
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - run: npm ci
+      - run: npx cap sync android
+      - name: Build test APK (installable on any Android phone)
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: naz-pash-test-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+      - name: Build signed release bundle for Google Play (only when signing secrets exist)
+        if: ${{ env.KS != '' }}
+        env:
+          KS: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        working-directory: android
+        run: |
+          echo "$KS" | base64 -d > upload.jks
+          ./gradlew bundleRelease --no-daemon \
+            -Pandroid.injected.signing.store.file=$PWD/upload.jks \
+            -Pandroid.injected.signing.store.password="$KS_PASS" \
+            -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
+            -Pandroid.injected.signing.key.password="$KEY_PASS"
+      - uses: actions/upload-artifact@v4
+        if: ${{ hashFiles('android/app/build/outputs/bundle/release/*.aab') != '' }}
+        with:
+          name: naz-pash-play-bundle
+          path: android/app/build/outputs/bundle/release/*.aab

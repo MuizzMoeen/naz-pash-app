@@ -1,0 +1,47 @@
+name: iOS build
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  ios:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+      - run: npx cap sync ios
+      - name: Check it compiles (simulator build, no Apple account needed)
+        working-directory: ios/App
+        run: xcodebuild -project App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build | tail -20
+      - name: Build & upload to TestFlight (only when Apple secrets exist)
+        if: ${{ env.ASC_KEY_ID != '' }}
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        working-directory: ios/App
+        run: |
+          mkdir -p ~/private_keys
+          echo "$ASC_KEY_P8_BASE64" | base64 -d > ~/private_keys/AuthKey_$ASC_KEY_ID.p8
+          BUILD=$(( GITHUB_RUN_NUMBER + 100 ))
+          xcodebuild -project App.xcodeproj -scheme App -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath $RUNNER_TEMP/App.xcarchive \
+            DEVELOPMENT_TEAM=$TEAM_ID CODE_SIGN_STYLE=Automatic CURRENT_PROJECT_VERSION=$BUILD \
+            -allowProvisioningUpdates -authenticationKeyPath ~/private_keys/AuthKey_$ASC_KEY_ID.p8 \
+            -authenticationKeyID $ASC_KEY_ID -authenticationKeyIssuerID $ASC_ISSUER_ID archive
+          cat > $RUNNER_TEMP/export.plist <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>teamID</key><string>$TEAM_ID</string>
+            <key>destination</key><string>upload</string>
+            <key>signingStyle</key><string>automatic</string>
+          </dict></plist>
+          PLIST
+          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/App.xcarchive -exportOptionsPlist $RUNNER_TEMP/export.plist \
+            -exportPath $RUNNER_TEMP/out -allowProvisioningUpdates -authenticationKeyPath ~/private_keys/AuthKey_$ASC_KEY_ID.p8 \
+            -authenticationKeyID $ASC_KEY_ID -authenticationKeyIssuerID $ASC_ISSUER_ID

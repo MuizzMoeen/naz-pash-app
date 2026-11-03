@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Naz &amp; Pash</string>
+    <string name="title_activity_main">Naz &amp; Pash</string>
+    <string name="package_name">com.nazandpash.cozyhome</string>
+    <string name="custom_url_scheme">com.nazandpash.cozyhome</string>
+</resources>

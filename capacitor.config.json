@@ -1,0 +1,12 @@
+{
+  "appId": "com.nazandpash.cozyhome",
+  "appName": "Naz & Pash",
+  "webDir": "www",
+  "backgroundColor": "#ffd1e3",
+  "ios": { "contentInset": "never", "backgroundColor": "#ffd1e3" },
+  "android": { "backgroundColor": "#ffd1e3" },
+  "plugins": {
+    "SplashScreen": { "launchShowDuration": 1500, "launchAutoHide": false, "backgroundColor": "#ffd1e3", "showSpinner": false },
+    "StatusBar": { "overlaysWebView": true, "style": "LIGHT" }
+  }
+}
