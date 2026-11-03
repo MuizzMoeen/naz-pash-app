@@ -3,6 +3,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   android:
     runs-on: ubuntu-latest
@@ -21,6 +23,16 @@ jobs:
         with:
           name: naz-pash-test-apk
           path: android/app/build/outputs/apk/debug/*.apk
+      - name: Publish test APK as a direct download link
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk naz-pash-test.apk
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-test
+          name: Android test build
+          prerelease: true
+          make_latest: false
+          body: "Test build #${{ github.run_number }} — open this page on an Android phone and tap **naz-pash-test.apk** to install."
+          files: naz-pash-test.apk
       - name: Build signed release bundle for Google Play (only when signing secrets exist)
         if: ${{ env.KS != '' }}
         env:
