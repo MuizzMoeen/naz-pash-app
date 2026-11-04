@@ -9,3 +9,4 @@ ios/DerivedData/
 *.jks
 *.p8
 .DS_Store
+_site/

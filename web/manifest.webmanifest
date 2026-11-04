@@ -1,0 +1,16 @@
+{
+  "name": "Naz & Pash's Cozy Home",
+  "short_name": "Naz & Pash",
+  "description": "A cozy cat-care game starring Nazbanoo the Persian and Pashmak the Turkish Van.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffd1e3",
+  "theme_color": "#ffd1e3",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
