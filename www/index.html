@@ -306,6 +306,10 @@ body.rm .cf{display:none}
 .mgcat>svg{width:330px;height:346px;overflow:visible}
 .tool{position:absolute;pointer-events:none;z-index:20;left:-200px;top:-200px}
 .tangle{position:absolute;pointer-events:none;width:40px;height:40px}
+.mgface{position:absolute;left:calc(50% - 240px);top:-10px;width:480px;height:504px;transition:transform .1s}.mgface.flinch{animation:flinch .35s}@keyframes flinch{0%,100%{transform:none}30%{transform:translate(10px,-6px) rotate(3deg)}60%{transform:translate(-8px,2px) rotate(-2deg)}}
+.goopy{position:absolute;pointer-events:none;width:18px;height:18px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 40% 35%,#ecd99a,#c9a85a 70%,#a88a46);box-shadow:0 0 0 2px rgba(201,143,94,.35)}
+.speedo{position:absolute;left:14px;bottom:14px;width:130px;height:12px;border-radius:8px;background:rgba(255,255,255,.8);box-shadow:inset 0 0 0 2px #f0bfd3;overflow:hidden}.speedo i{display:block;height:100%;width:4%;background:#7fd38a;border-radius:8px;transition:width .08s}.speedo.fast i{background:#ff6f8a}.spdL{position:absolute;left:14px;bottom:30px;width:130px;font-size:11px;color:#9a7b94;text-align:center;pointer-events:none}
+#ovl.portrait .mgface{top:calc(50% - 300px)}
 .mud{position:absolute;pointer-events:none;width:44px;height:34px;border-radius:50%;background:radial-gradient(#8d6440 0,#a67a52 45%,rgba(166,122,82,0) 72%);transform:translate(-50%,-50%)}
 .bub{position:absolute;pointer-events:none;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff 0,#fff 30%,rgba(220,240,255,.85) 60%,rgba(190,225,255,.6));border:1px solid rgba(160,210,240,.6);transform:translate(-50%,-50%);z-index:12;transition:opacity 1s,transform 1s}
 .bub.pop{opacity:0;transform:translate(-50%,40px)}
@@ -517,6 +521,8 @@ body.lsphone .tb.who .e svg{width:22px;height:24px}
 #ovl.portrait .items{grid-template-columns:repeat(2,1fr)}
 #ovl.portrait .recap{flex-wrap:wrap;justify-content:center}
 #ovl.portrait .foods button{width:120px}
+#ov .reasons .rs:not(.check){flex-direction:row;align-items:center;gap:8px;text-align:left;padding-right:52px}.rs .rse{font-size:22px;flex:none;width:28px;text-align:center}.rs span.rst{position:static;flex:1;display:flex;flex-direction:column;font-weight:600;line-height:1.15;color:#5a3d55;font-size:14px}.rs .rst small{font-weight:400;font-size:11.5px;color:#9a7b94;margin-top:2px}.rs.unsure{background:#fff6e6!important;border-color:#f1c27a!important}
+.notes{margin-top:8px;background:#fffbe9;border:2px dashed #f0d58a;border-radius:12px;padding:6px 10px;font-size:13px;text-align:left}.notes b{display:block;margin-bottom:2px}
 </style>
 </head>
 <body>
@@ -623,6 +629,8 @@ function MESSY(k){const F=k==='naz'?'#fffaf4':'#fffdf9',O='#dccbb8';let s='<g cl
  return s+'</g>'}
 const DIRT=`<g class="dirt" fill="#9b7653" opacity="0"><ellipse cx="72" cy="150" rx="9" ry="6"/><ellipse cx="132" cy="170" rx="8" ry="5"/><ellipse cx="114" cy="58" rx="7" ry="5"/><ellipse cx="150" cy="140" rx="6" ry="4"/><ellipse cx="88" cy="188" rx="7" ry="4"/><circle cx="64" cy="74" r="4"/></g>`;
 const TANG=`<g class="tang" stroke="#c4ab90" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0"><path d="M64 140 q4 -7 8 0 q4 7 8 0 q-4 -6 -8 -2"/><path d="M118 156 q4 -7 8 0 q4 7 8 0"/><path d="M92 176 q5 -6 9 0 q4 6 9 -1"/><path d="M58 100 q4 -6 8 0 q3 6 7 0"/><path d="M134 104 q4 -6 8 0 q3 6 7 0"/></g>`;
+function TEARS(k,dy=0){const L=k==='naz'?[90,96,110,96,66,92,134,92]:[92,93,108,93,68,91,132,91];const [a,b,c2,d,e,f,g,h]=L;
+ return `<g class="tears" opacity="${k==='naz'?.35:0}" transform="translate(0 ${dy})"><path d="M${a} ${b} Q${a-4} ${b+12} ${a-10} ${b+22} Q${a-4} ${b+16} ${a+2} ${b+8}Z M${c2} ${d} Q${c2+4} ${d+12} ${c2+10} ${d+22} Q${c2+4} ${d+16} ${c2-2} ${d+8}Z" fill="#c98f5e" opacity=".75"/><g class="goop" fill="#d8c27a" stroke="#b49a4e" stroke-width=".8"><ellipse cx="${a}" cy="${b+1}" rx="3.2" ry="2.4"/><ellipse cx="${c2}" cy="${d+1}" rx="3.2" ry="2.4"/><circle cx="${e}" cy="${f}" r="1.8"/><circle cx="${g}" cy="${h}" r="1.8"/></g><g class="redeye" opacity="0" fill="none" stroke="#ff6f8a" stroke-width="2.4"><ellipse cx="${(a+e)/2}" cy="${b-4}" rx="14" ry="10"/><ellipse cx="${(c2+g)/2}" cy="${d-4}" rx="14" ry="10"/></g></g>`}
 const CLAWS=`<g class="claws" opacity="0" stroke="#a89a8a" stroke-width="2.6" stroke-linecap="round" fill="none"><path d="M64 205 l-2 6 M72 207 l-1 6 M80 206 l1 6 M120 206 l-1 6 M128 207 l1 6 M136 205 l2 6"/></g>`;
 function bowSVG(x,y,c1,c2,c3){return `<g transform="translate(${x} ${y}) rotate(18)"><path d="M0 0 L-16 -11 Q-22 0 -16 11Z" fill="${c1}" stroke="${c2}" stroke-width="2" stroke-linejoin="round"/><path d="M0 0 L16 -11 Q22 0 16 11Z" fill="${c1}" stroke="${c2}" stroke-width="2" stroke-linejoin="round"/><circle r="5" fill="${c3}"/></g>`}
 function hatSVG(id,k){const dy=k==='naz'?0:4,bx=k==='naz'?142:140,by=k==='naz'?36:28;
@@ -661,7 +669,7 @@ ${bo}${bf}<ellipse cx="100" cy="150" rx="60" ry="50" fill="${F}"/>
 <path d="M148 64 Q150 34 138 28 Q122 38 112 48 Z" fill="${F}" stroke="${O}" stroke-width="3" stroke-linejoin="round"/><path d="M142 58 Q142 40 136 35 Q126 42 120 48Z" fill="#ffc9d6"/>
 ${mo}${mf}<circle cx="100" cy="88" r="47" fill="${F}"/>
 <path d="M70 66 q6 -6 12 -2 M118 64 q6 -4 12 2 M92 56 q8 -5 16 0" stroke="#efe2d3" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-<path d="M90 96 Q86 108 80 118 Q86 112 92 104Z M110 96 Q114 108 120 118 Q114 112 108 104Z" fill="#c98f5e" opacity=".5"/>
+${TEARS('naz')}
 <ellipse cx="64" cy="108" rx="9" ry="5" fill="#ffb3c8" opacity=".5"/><ellipse cx="136" cy="108" rx="9" ry="5" fill="#ffb3c8" opacity=".5"/>
 <g class="eo"><ellipse cx="78" cy="91" rx="12" ry="11" fill="#a9bccb"/><ellipse cx="122" cy="91" rx="12" ry="11" fill="#a9bccb"/><ellipse cx="79" cy="93" rx="5" ry="6" fill="#2d2a33"/><ellipse cx="121" cy="93" rx="5" ry="6" fill="#2d2a33"/><circle cx="83" cy="94" r="2" fill="#fff"/><circle cx="125" cy="94" r="2" fill="#fff"/><path d="M64 88 Q78 80 92 88 L92 79 L64 79Z M108 88 Q122 80 136 88 L136 79 L108 79Z" fill="${F}"/><path d="M65 88 Q78 82 91 88 M109 88 Q122 82 135 88" stroke="#7a5a44" stroke-width="2.6" fill="none" stroke-linecap="round"/></g>
 <g class="ec" stroke="#7a5a44" stroke-width="3" fill="none" stroke-linecap="round"><path d="M66 92 q12 7 24 0 M110 92 q12 7 24 0"/></g>
@@ -689,6 +697,7 @@ ${HAT}</g>${NECK}${MESSY(k)}${DIRT}${TANG}</svg>`;
 <g clip-path="url(#${id}h)"><path d="M50 40 H150 V94 Q140 80 130 80 Q118 74 108 82 L104 48 Q100 44 96 48 L92 82 Q82 74 70 80 Q60 80 50 94Z" fill="${G}"/><path d="M60 72 q10 -4 14 4 M126 76 q10 -8 16 -2" stroke="${GO}" stroke-width="2" fill="none" opacity=".5"/></g>
 <circle cx="100" cy="90" r="44" fill="none" stroke="${O}" stroke-width="3"/>
 <ellipse cx="68" cy="108" rx="8" ry="5" fill="#ffb3c8" opacity=".45"/><ellipse cx="132" cy="108" rx="8" ry="5" fill="#ffb3c8" opacity=".45"/>
+${TEARS('pash')}
 <g class="eo"><path d="M68 91 Q80 80 92 91 Q80 100 68 91Z" fill="#e0952f" stroke="#9a5d1c" stroke-width="2"/><path d="M108 91 Q120 80 132 91 Q120 100 108 91Z" fill="#e0952f" stroke="#9a5d1c" stroke-width="2"/><ellipse cx="80" cy="91" rx="2.6" ry="7" fill="#2b2216"/><ellipse cx="120" cy="91" rx="2.6" ry="7" fill="#2b2216"/><circle cx="84" cy="88" r="1.8" fill="#fff"/><circle cx="124" cy="88" r="1.8" fill="#fff"/><path d="M68 90 Q80 82 92 90 M108 90 Q120 82 132 90" stroke="#7a4a20" stroke-width="2.2" fill="none" stroke-linecap="round"/></g>
 <g class="ec" stroke="#7a4a20" stroke-width="3" fill="none" stroke-linecap="round"><path d="M68 92 q12 7 24 0 M108 92 q12 7 24 0"/></g>
 <g class="eh" stroke="#7a4a20" stroke-width="3.5" fill="none" stroke-linecap="round"><path d="M68 94 q12 -11 24 0 M108 94 q12 -11 24 0"/></g>
@@ -700,6 +709,39 @@ ${HAT}</g>${NECK}${MESSY(k)}${DIRT}${TANG}</svg>`;
 ${HAT}</g>${NECK}${MESSY(k)}${DIRT}${TANG}</svg>`;
 }
 
+function sleepSVG(k){const id='s'+(uidC++),outfit=(S&&S.outfit&&S.outfit[k])||{};
+ if(k==='naz'){const F='#fffaf4',O='#dccbb8';const [bo,bf]=ring(100,164,70,36,15,13,-200,20,F,O);const [mo,mf]=ring(100,114,46,42,13,16,180,520,F,O);
+  return `<svg class="catsvg pose" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg">${bo}${bf}<ellipse cx="100" cy="166" rx="74" ry="38" fill="${F}"/>
+<path d="M60 160 q6 8 0 16 M140 160 q-6 8 0 16 M84 182 q6 4 12 2 M118 182 q-6 4 -12 2" stroke="#efe2d3" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<g class="head"><path d="M54 92 Q52 62 64 56 Q80 66 90 76 Z" fill="${F}" stroke="${O}" stroke-width="3" stroke-linejoin="round"/><path d="M60 86 Q60 68 66 63 Q76 70 82 76Z" fill="#ffc9d6"/>
+<path d="M146 92 Q148 62 136 56 Q120 66 110 76 Z" fill="${F}" stroke="${O}" stroke-width="3" stroke-linejoin="round"/><path d="M140 86 Q140 68 134 63 Q124 70 118 76Z" fill="#ffc9d6"/>
+${mo}${mf}<circle cx="100" cy="114" r="45" fill="${F}"/>
+${TEARS('naz',22)}
+<ellipse cx="66" cy="132" rx="9" ry="5" fill="#ffb3c8" opacity=".55"/><ellipse cx="134" cy="132" rx="9" ry="5" fill="#ffb3c8" opacity=".55"/>
+<path d="M66 116 q12 7 24 0 M110 116 q12 7 24 0" stroke="#7a5a44" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M95 119 h10 q0 6 -5 7 q-5 -1 -5 -7z" fill="#ffaabd" stroke="#e58aa0" stroke-width="1.4"/><path d="M91 133 Q100 128 109 133" stroke="#c9a48e" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<g stroke="#e8dacb" stroke-width="1.6" stroke-linecap="round"><path d="M62 128 l-22 -3 M62 133 l-22 3 M138 128 l22 -3 M138 133 l22 3"/></g><g transform="translate(0 24)">${hatSVG(bdayOn(k)?'party':outfit.head,k)}</g></g>
+<g class="tail"><path d="M168 176 C176 204 70 212 40 194" fill="none" stroke="${O}" stroke-width="30" stroke-linecap="round"/><path d="M168 176 C176 204 70 212 40 194" fill="none" stroke="${F}" stroke-width="24" stroke-linecap="round"/><path d="M60 198 q14 4 26 2 M120 200 q14 -2 26 -6" stroke="#efe2d3" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+${MESSY(k)}${DIRT}${TANG}<g class="claws"></g></svg>`}
+ const F='#fffdf9',O='#dccbb8',G='#efa65c',GO='#cf8436';
+ return `<svg class="catsvg pose" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="${id}h"><circle cx="54" cy="168" r="33"/></clipPath></defs>
+<g class="tail" style="transform-origin:166px 190px"><path d="M166 190 C194 194 198 166 184 148" fill="none" stroke="${GO}" stroke-width="20" stroke-linecap="round"/><path d="M166 190 C194 194 198 166 184 148" fill="none" stroke="${G}" stroke-width="15" stroke-linecap="round"/></g>
+<g stroke-linecap="round"><path d="M140 164 Q142 134 150 116" stroke="${O}" stroke-width="24" fill="none"/><path d="M140 164 Q142 134 150 116" stroke="${F}" stroke-width="18" fill="none"/><ellipse cx="151" cy="112" rx="11" ry="9" fill="${F}" stroke="${O}" stroke-width="3"/>
+<path d="M162 172 Q172 146 180 130" stroke="${O}" stroke-width="22" fill="none"/><path d="M162 172 Q172 146 180 130" stroke="${F}" stroke-width="16" fill="none"/><ellipse cx="181" cy="126" rx="10" ry="8" fill="${F}" stroke="${O}" stroke-width="3"/>
+<path d="M146 110 v-5 M152 109 v-5 M177 124 v-5 M183 123 v-5" stroke="#ffb3c8" stroke-width="3"/></g>
+<ellipse cx="116" cy="176" rx="64" ry="30" fill="${F}" stroke="${O}" stroke-width="3"/>
+<ellipse cx="120" cy="168" rx="40" ry="16" fill="#fff3ef"/><path d="M100 168 q6 -4 12 0 M120 164 q6 -4 12 0 M136 172 q5 -3 10 0" stroke="#f2dcd4" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<ellipse cx="160" cy="186" rx="9" ry="6" fill="${G}" opacity=".9"/>
+<g stroke-linecap="round"><path d="M86 156 Q84 140 92 132" stroke="${O}" stroke-width="20" fill="none"/><path d="M86 156 Q84 140 92 132" stroke="${F}" stroke-width="14" fill="none"/><ellipse cx="95" cy="129" rx="9" ry="8" fill="${F}" stroke="${O}" stroke-width="3"/>
+<path d="M104 154 Q106 138 116 132" stroke="${O}" stroke-width="20" fill="none"/><path d="M104 154 Q106 138 116 132" stroke="${F}" stroke-width="14" fill="none"/><ellipse cx="119" cy="130" rx="9" ry="8" fill="${F}" stroke="${O}" stroke-width="3"/></g>
+<g class="head"><path d="M28 188 L24 210 L46 198Z" fill="${G}" stroke="${GO}" stroke-width="3" stroke-linejoin="round"/><path d="M80 188 L86 210 L64 198Z" fill="${G}" stroke="${GO}" stroke-width="3" stroke-linejoin="round"/>
+<circle cx="54" cy="168" r="33" fill="${F}"/><g clip-path="url(#${id}h)"><path d="M18 174 Q30 166 40 168 Q48 164 52 170 L52 206 H18Z M90 174 Q78 166 68 168 Q60 164 56 170 L56 206 H90Z" fill="${G}"/></g>
+<circle cx="54" cy="168" r="33" fill="none" stroke="${O}" stroke-width="3"/>
+<ellipse cx="32" cy="154" rx="7" ry="4" fill="#ffb3c8" opacity=".5"/><ellipse cx="76" cy="154" rx="7" ry="4" fill="#ffb3c8" opacity=".5"/>
+<path d="M34 166 q9 -6 18 0 M58 166 q9 -6 18 0" stroke="#7a4a20" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M48 158 h12 q-2 -6 -6 -8 q-4 2 -6 8z" fill="#ffa6b8" stroke="#e5859c" stroke-width="1.3"/><path d="M54 150 q-4 -5 -9 -2 M54 150 q4 -5 9 -2" stroke="#c9a48e" stroke-width="2" fill="none" stroke-linecap="round"/>
+<g stroke="#e8dacb" stroke-width="1.5" stroke-linecap="round"><path d="M30 156 l-18 4 M30 152 l-18 -2 M78 156 l18 4 M78 152 l18 -2"/></g></g>
+${MESSY(k)}${DIRT}${TANG}<g class="claws"></g></svg>`}
 function backNeck(id,k){if(!id)return '';const y=k==='naz'?126:124;const col={collar:k==='naz'?'#e0609a':'#4c8fd9',bandana:k==='naz'?'#ff8fbd':'#7ab8ff',pearls:'#fffdf6',scarf:'#e8434f'}[id];
  if(id==='pearls'){let s='';for(let i=0;i<9;i++){const x=70+i*7.5;s+=`<circle cx="${x}" cy="${(y+Math.sin(i/8*Math.PI)*5).toFixed(1)}" r="3.4" fill="#fffdf6" stroke="#d9cbb8"/>`}return s}
  return `<path d="M66 ${y} Q100 ${y+9} 134 ${y}" stroke="${col}" stroke-width="${id==='scarf'?12:8}" fill="none" stroke-linecap="round"/>${id==='bandana'?`<path d="M94 ${y+3} l6 -8 l6 8z" fill="${col}"/>`:''}`}
@@ -847,7 +889,7 @@ const CLOUD=`<svg viewBox="0 0 230 170" width="230" height="170"><g fill="#fff" 
 const LITTERSVG=`<svg width="110" height="56" viewBox="0 0 110 56"><ellipse cx="55" cy="52" rx="50" ry="4" fill="rgba(0,0,0,.1)"/><path d="M4 14 H106 L98 50 Q97 53 94 53 H16 Q13 53 12 50Z" fill="#c9b8e8" stroke="#9f8ccc" stroke-width="2"/><ellipse cx="55" cy="14" rx="51" ry="8" fill="#b6a3dd" stroke="#9f8ccc" stroke-width="2"/><ellipse cx="55" cy="15" rx="45" ry="5.5" fill="#efe1c6"/><g fill="#e2cfa9"><circle cx="30" cy="15" r="1.4"/><circle cx="62" cy="13" r="1.4"/><circle cx="80" cy="16" r="1.4"/><circle cx="45" cy="17" r="1.2"/></g><text x="55" y="40" text-anchor="middle" font-family="Fredoka" font-size="11" fill="#fff" font-weight="700">LITTER</text></svg>`;
 
 /* ---------------- STATE ---------------- */
-const mk=()=>({food:60,water:65,fun:70,clean:75,fur:60,energy:85,health:95,nails:62,bfDay:0,lastVet:1,potty:120});
+const mk=()=>({food:60,water:65,fun:70,clean:75,fur:60,energy:85,health:95,nails:62,eyes:80,bfDay:0,lastVet:1,potty:120});
 const DEF=()=>({v:1,day:1,min:7*60+30,love:0,friend:40,bowls:{naz:{food:40,water:70},pash:{food:40,water:70}},cats:{naz:mk(),pash:mk()},
  owned:[],outfit:{naz:{head:'bow',neck:''},pash:{head:'',neck:''}},decor:{wall:'dots',rug:'pink'},toys:[],lumps:[],lumps2:[],muted:false,gift:false,set:{speed:2,vib:true,motion:false},tut:0,tv:{on:false,ch:0},mess:[],messSeen:{},st:{},stk:{},newStk:0,streak:{d:'',n:0,best:0},bdays:{},bdSeen:{},xb:[1,1,1,1,1,1],today:{love:0,fights:0,care:0},firstCuddle:false});
 let S=DEF();
@@ -908,12 +950,17 @@ function refreshCatArt(k){const r=R[k];r.view=null;r.cls='';$(`#card-${k} .av`).
 
 /* ---------------- DAILY BREAKFAST WISH & MOOD ---------------- */
 const FOODS={shrimp:{e:'🍤',n:'shrimp'},tuna:{e:'🐟',n:'tuna'},salmon:{e:'🍣',n:'salmon'},chicken:{e:'🍗',n:'chicken'},milk:{e:'🥛',n:'milk'}};
+const LWISH={naz:[['tuna',70],['salmon',30]],pash:[['chicken',45],['tuna',30],['shrimp',25]]};
+const isLunchH=h=>h>=12&&h<14;
+function lunchOf(k){const c=S.cats[k];if(!c.lwish||c.lwish.day!==S.day){let t=Math.random()*100,f=LWISH[k][0][0];for(const [x,w] of LWISH[k]){if((t-=w)<0){f=x;break}}c.lwish={day:S.day,food:f}}return c.lwish.food}
+const lunchDue=k=>isLunchH(hourF())&&S.cats[k].lunchDay!==S.day;
 const WISH={naz:[['shrimp',60],['salmon',22],['chicken',18]],pash:[['tuna',55],['chicken',25],['salmon',20]]};
 function wishOf(k){const c=S.cats[k];if(!c.wish||c.wish.day!==S.day){let t=Math.random()*100,f=WISH[k][0][0];for(const [x,w] of WISH[k]){if((t-=w)<0){f=x;break}}c.wish={day:S.day,food:f}}return c.wish.food}
 const gAbs=()=>S.day*1440+S.min;
 const isMad=k=>(S.cats[k].madUntil||0)>gAbs();
 function makeMad(k,why){const c=S.cats[k];if(isMad(k))return;c.madUntil=gAbs()+6*60;c.madWhy=why;c.fun=Math.max(0,c.fun-15);R[k].grumpyUntil=now+4;SFX.meow(k,'grr')}
-const dreamShown=k=>{const h=hourF(),c=S.cats[k];return h>=4&&h<11&&c.bfDay!==S.day&&!PH.active&&!R[k].el.classList.contains('hidden')&&R[k].state!=='tv'};
+const dreamFood=k=>lunchDue(k)?lunchOf(k):wishOf(k);
+const dreamShown=k=>{const h=hourF(),c=S.cats[k];return (h>=4&&h<11&&c.bfDay!==S.day||lunchDue(k))&&!PH.active&&!R[k].el.classList.contains('hidden')&&R[k].state!=='tv'};
 const SPEC={naz:false,pash:false};
 /* ---- Pash the food thief ---- */
 function startSneak(race){const r=R.pash;if(r.state==='hiding')return false;if(F.active||Z.active||LZ.active||LK.active||CU.active||P.active)return false;if(!free('pash')&&!race)return false;if(SLEEPS.includes(r.state))return false;
@@ -951,6 +998,8 @@ const MESSDEF={
   svg:()=>`<svg width="74" height="24" viewBox="0 0 74 24"><path d="M6 14 q4 -9 20 -8 q12 -5 26 0 q18 0 16 9 q-2 8 -26 7 q-12 3 -26 -1 q-12 -2 -10 -7z" fill="#9fd6ff" opacity=".8"/><ellipse cx="24" cy="11" rx="10" ry="2.6" fill="#fff" opacity=".75"/><circle cx="66" cy="4" r="2.6" fill="#9fd6ff"/><circle cx="6" cy="5" r="2" fill="#9fd6ff"/></svg>`},
  bauble:{tool:'🎄',max:6,msg:'🎄 Oh no — they knocked a bauble off the Christmas tree! Tap it to hang it back.',
   svg:k=>`<svg width="26" height="30" viewBox="0 0 26 30"><rect x="9" y="2" width="8" height="6" rx="2" fill="#e6c25a"/><circle cx="13" cy="18" r="10" fill="${k==='naz'?'#ff6fae':'#ffb24d'}" stroke="#fff" stroke-width="1.5"/><circle cx="9" cy="14" r="3" fill="#fff" opacity=".6"/></svg>`},
+ puke:{tool:'🧻',max:3,msg:'🤮 Uh oh — someone threw up! Tap it to clean it up.',
+  svg:()=>`<svg width="40" height="20" viewBox="0 0 40 20"><path d="M4 13 q2 -8 12 -6 q8 -6 16 0 q8 2 4 9 q-14 4 -30 0z" fill="#d9c37a" stroke="#b39a52" stroke-width="1.2"/><ellipse cx="16" cy="10" rx="5" ry="3" fill="#bfa264"/><path d="M24 9 q4 -3 7 1" stroke="#a88c50" stroke-width="1.4" fill="none"/></svg>`},
  litter:{tool:'🧹',max:4,msg:'😾 Litter got kicked out of the box! Tap it to sweep it up.',
   svg:()=>`<svg width="44" height="18" viewBox="0 0 44 18"><g fill="#e8d6b0" stroke="#c9b48a" stroke-width=".8">${[[5,12],[11,14],[16,10],[22,14],[28,11],[33,15],[38,12],[14,16],[26,16],[9,9]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.2"/>`).join('')}</g><ellipse cx="21" cy="10" rx="5" ry="3.6" fill="#a8794b"/></svg>`}};
 const messEls={};let messUid=1;
@@ -968,19 +1017,25 @@ function cleanMess(id){if(PH.active)return;const i=S.mess.findIndex(m=>m.id===id
 let wetT={naz:0,pash:0};
 
 /* ---------------- ILLNESS ---------------- */
-const ILL={tummy:{n:'Tummy ache',e:'🤢',sym:'Holding tummy, not eating',say:['My tummy hurts… 🤢','*curls up* 😿','no food please… 🤢'],noEat:1},
- lazy:{n:'Very tired & lethargic',e:'😴',sym:'Sleeping all the time, lazy',say:['so… tired… 😴','*yawn* 😪','can’t get up…'],lazy:1},
- noeat:{n:'Lost appetite',e:'🍽️',sym:'Not eating',say:['I’m not hungry… 😿','*sniffs food, walks away*'],noEat:1},
- nodrink:{n:'Not drinking',e:'💧',sym:'Not drinking water',say:['don’t want water… 😿','*ignores the water bowl*'],noDrink:1},
- constip:{n:'Constipation',e:'🚽',sym:'Not pooping',say:['…nothing happened 😿','*strains in the litter box*'],constip:1},
- cold:{n:'Kitty cold',e:'🤧',sym:'Sneezing & sniffly',say:['*ACHOO* 🤧','*sniff sniff* 😿','*sneeze*'],sneeze:1}};
+const ILL={
+ tummy:{n:'Upset tummy',e:'🤮',sym:'Throwing up',ex:'Little sick puddles or hairballs on the floor, hacking sounds',say:['*hack hack hack* 🤮','*bleh* 😿','my tummy… 🤢'],vomit:1},
+ noeat:{n:'Lost appetite',e:'🍽️',sym:'Won’t eat',ex:'Sniffs the food, then walks away — even breakfast!',say:['I’m not hungry… 😿','*sniffs food, walks away*'],noEat:1},
+ nodrink:{n:'Not drinking',e:'💧',sym:'Won’t drink water',ex:'Ignores the water bowl, even when it’s full',say:['don’t want water… 😿','*ignores the water bowl*'],noDrink:1},
+ lazy:{n:'Very tired & lethargic',e:'🥱',sym:'Sleeping all day',ex:'Won’t play or explore, keeps going back to bed',say:['so… tired… 🥱','*yawn* 😪','can’t get up…'],lazy:1},
+ constip:{n:'Constipation',e:'🚽',sym:'Litter box trouble',ex:'Strains in the litter box but nothing comes out',say:['…nothing happened 😿','*strains in the litter box*'],constip:1},
+ cold:{n:'Kitty cold',e:'🤧',sym:'Sneezing & runny nose',ex:'Lots of ACHOOs and sniffles',say:['*ACHOO* 🤧','*sniff sniff* 😿','*sneeze*'],sneeze:1},
+ eyeinf:{n:'Eye infection',e:'👁️',sym:'Red, goopy eyes',ex:'Squinting, red around the eyes, yellow gunk',say:['my eye hurts… 😿','*squints* 👁️','*paws at eye*'],eyes:1}};
+const ILLR=['tummy','noeat','nodrink','lazy','constip','cold'];
 const sick=k=>S.cats[k].ill&&ILL[S.cats[k].ill.t];
-function getSick(k){const c=S.cats[k];if(c.ill)return;const t=pick(Object.keys(ILL));c.ill={t,day:S.day};R[k].sickT=now+2;
+function getSick(k,t0){const c=S.cats[k];if(c.ill)return;const t=t0||pick(ILLR);c.ill={t,day:S.day};c.noted={};R[k].sickT=now+2;
  const hh=CATS[k].her==='her'?'her':'him';if(!S.illSeen){S.illSeen=true;toast(`🤒 Hmm… ${CATS[k].name} isn’t acting like ${hh}self. Watch what ${CATS[k].pron} does, then tap 📞 Call vet and tell them what you noticed!`,6,true)}else toast(`🤔 Hmm… ${CATS[k].name} is acting a bit strange. Keep an eye on ${hh}!`,4.5,true);SFX.meow(k,'sad',.7)}
 function sneezeSfx(){nz('highpass',2500,.12,.18,.005);nz('bandpass',800,.25,.12,.02,.08)}
 
 /* ---------------- PHONE → VET BOOKING ---------------- */
 const VETCOST={check:40,sick:60};
+function noteHTML(k){const c=S.cats[k],n=CATS[k],L=[];if(c.ill&&c.noted)Object.keys(c.noted).forEach(t=>{if(ILL[t])L.push(`${ILL[t].e} ${ILL[t].ex.split(/[,—]/)[0].trim()}`)});
+ if(c.ill&&!L.length)L.push(`🤔 ${n.name} seems a little off — keep watching!`);if(c.eyes<40)L.push('👁️ Tear stains — time for an eye wipe');if(c.clean<30)L.push('🫧 Pretty dirty');if(c.food<20)L.push('🍽️ Very hungry');
+ if(!L.length)L.push(`😊 Nothing unusual — ${n.pron} seems fine`);return `<div class="notes"><b>📝 What you’ve noticed about ${n.short}:</b>${L.slice(0,4).map(x=>`<div>${x}</div>`).join('')}</div>`}
 function openPhone(k0){if(F.active||P.active||LZ.active){toast('Deal with the kitties first! 😾',2,true);return}
  let k=k0||sel;
  const draw=()=>{const c=S.cats[k],due=vetDue(k),vd=VETGAP-(S.day-c.lastVet);
@@ -989,8 +1044,10 @@ function openPhone(k0){if(F.active||P.active||LZ.active){toast('Deal with the ki
   <p>Who needs the vet?</p><div class="who2" style="justify-content:center">${KEYS.map(j=>`<button data-c="${j}" style="--cc:${CATS[j].col}" class="${k===j?'on':''}">${CATS[j].short}</button>`).join('')}</div>
   <p style="margin-top:6px">What’s going on with <b>${CATS[k].name}</b>?</p>
   <div class="reasons"><button class="rs check" data-r="check">🩺 Routine checkup <small>${due?'<b style="color:#d93a62">due now!</b>':'next one in '+vd+' days'}</small><span>💗 ${VETCOST.check}</span></button>
-  ${Object.entries(ILL).map(([id,v])=>`<button class="rs" data-r="${id}">${v.e} ${v.sym}<span>💗 ${VETCOST.sick}</span></button>`).join('')}</div>
-  <p style="font-size:13px;margin-top:8px">You have <b>💗 ${Math.floor(S.love)}</b> · Watch how they act to pick the right reason!</p></div>`;
+  ${Object.entries(ILL).map(([id,v])=>`<button class="rs" data-r="${id}"><b class="rse">${v.e}</b><span class="rst">${v.sym}<small>${v.ex}</small></span><span>💗 ${VETCOST.sick}</span></button>`).join('')}
+  <button class="rs unsure" data-r="unwell"><b class="rse">🤒</b><span class="rst">Just not feeling well / not sure<small>Something’s off but you can’t tell what — the vet will figure it out</small></span><span>💗 ${VETCOST.sick}</span></button></div>
+  ${noteHTML(k)}
+  <p style="font-size:13px;margin-top:8px">You have <b>💗 ${Math.floor(S.love)}</b> · Pick the right symptom for a 🔎 detective bonus!</p></div>`;
   ov.querySelector('#mgX').onclick=()=>{SFX.blip();closeOverlay()};
   ov.querySelectorAll('.who2 button').forEach(b=>b.onclick=()=>{SFX.blip();k=b.dataset.c;draw()});
   ov.querySelectorAll('.rs').forEach(b=>b.onclick=()=>book(k,b.dataset.r))};
@@ -1202,14 +1259,14 @@ function buildKitchen(){
  jar.id='kJar';jar.dataset.room='kitchen';jar.title='Treat jar';jar.style.cssText='position:absolute;left:590px;top:314px;z-index:400';
  jar.onpointerdown=e=>{e.stopPropagation();if(PH.active)return;SFX.blip();shopTab='treats';openShop()};
 }
-function prepBreakfast(k){const h=hourF(),c=S.cats[k];
- if(c.bfDay===S.day||h<6||h>=11){openFridge(k);return}
+function prepBreakfast(k){const h=hourF(),c=S.cats[k],meal=lunchDue(k)?'lunch':'bf';
+ if(meal==='bf'&&(c.bfDay===S.day||h<6||h>=11)){openFridge(k);return}
  setView('kitchen',ORDER.indexOf('kitchen')-ORDER.indexOf(VIEW)||null);
- const beg=[k],o=other(k);if(S.cats[o].bfDay!==S.day&&['idle','walk','sit','groom','perch','window','tv','batting','box'].includes(R[o].state)&&Math.random()<.75)beg.push(o);
+ const beg=[k],o=other(k);if((meal==='lunch'?lunchDue(o):S.cats[o].bfDay!==S.day)&&['idle','walk','sit','groom','perch','window','tv','batting','box'].includes(R[o].state)&&Math.random()<.75)beg.push(o);
  beg.forEach(j=>{const r=R[j];cancel(j);r.spot=null;r.inHouse=false;if(r.room!=='kitchen'){r.room='kitchen';r.x=14;r.y=575;r.arc=0;r.jump=null}
   walkTo(j,BEG[j].x,BEG[j].y,()=>{r.state='beg';r.spot='beg-'+j;r.until=now+14;r.dir=-1;r.begT=0},2.6,'kitchen')});
- toast(beg.length>1?'🍳 Breakfast time! They both came running to beg 🥺':`🍳 Breakfast time! ${CATS[k].short} came running to beg 🥺`,2.6,true);SFX.meow(k,'norm',.7);
- const t0=now;let done=false;const iv=setInterval(()=>{if(done)return;if(R[k].state==='beg'||now-t0>3.4){done=true;clearInterval(iv);setTimeout(()=>{if(!ovl.classList.contains('show'))openFridge(k)},650)}},100)}
+ const mn=meal==='lunch'?'🥪 Lunch':'🍳 Breakfast';toast(beg.length>1?`${mn} time! They both came running to beg 🥺`:`${mn} time! ${CATS[k].short} came running to beg 🥺`,2.6,true);SFX.meow(k,'norm',.7);
+ const t0=now;let done=false;const iv=setInterval(()=>{if(done)return;if(R[k].state==='beg'||now-t0>3.4){done=true;clearInterval(iv);setTimeout(()=>{if(!ovl.classList.contains('show'))openFridge(k,meal)},650)}},100)}
 
 /* ---------------- STICKERS & STREAK ---------------- */
 const STK=[
@@ -1222,6 +1279,8 @@ const STK=[
  {id:'hide',e:'🙈',n:'Hide & seek champ',d:'Find a hiding kitty 5 times',k:'found',g:5,c:'#e6dcff'},
  {id:'bath',e:'🛁',n:'Splish splash',d:'Give 3 baths',k:'baths',g:3,c:'#d6f0ff'},
  {id:'brush',e:'✨',n:'Fluff master',d:'Brush 10 times',k:'brushes',g:10,c:'#fff3c4'},
+ {id:'eyes',e:'👁️',n:'Bright eyes',d:'Wipe teary eyes 5 times',k:'eyes',g:5,c:'#e3f1ff'},
+ {id:'lunch',e:'🥪',n:'Lunch bunch',d:'Serve the lunch they wanted 5 times',k:'lunchRight',g:5,c:'#fff0d6'},
  {id:'nail',e:'💅',n:'Pedicure pro',d:'Trim nails 5 times',k:'nails',g:5,c:'#ffe0ea'},
  {id:'vet',e:'🩺',n:'Brave at the vet',d:'First vet visit',k:'vets',g:1,c:'#d9f7ec'},
  {id:'diag',e:'🔎',n:'Kitty detective',d:'Spot the right symptoms',k:'diag',g:1,c:'#e7f0ff'},
@@ -1409,14 +1468,16 @@ function thoughtOf(k){const r=R[k],c=S.cats[k],n=K2(k),h=hourF(),b=S.bowls[k];
  if(r.state==='tv')return [k==='naz'?'Shh. I’m watching. 📺':'THE '+(S.tv.on&&S.tv.ch===0?'BIRDS':'SCREEN')+'!! 👀','tv'];
  if(k==='pash'&&r.state==='sneak')return ['Banoo’s food looks tastier 😼','sn'];
  if(k==='naz'&&isThief()&&!SLEEPS.includes(r.state))return ['Is he going for MY bowl?! 😾','sn'];
- if(r.state==='feast')return isMad(k)?['…I’ll eat it. But I’m still mad. 😾','md']:[k==='naz'?`Mmm. Acceptable. ${FOODS[wishOf(k)].e}`:`${FOODS[wishOf(k)].n.toUpperCase()}AAA ${FOODS[wishOf(k)].e}💕`,'fe'];
+ if(r.state==='feast')return isMad(k)?['…I’ll eat it. But I’m still mad. 😾','md']:(()=>{const w=FOODS[isLunchH(h)&&c.lunchDay===S.day?lunchOf(k):wishOf(k)];return [k==='naz'?`Mmm. Acceptable. ${w.e}`:`${w.n.toUpperCase()}AAA ${w.e}💕`,'fe']})();
  if(h>=4&&h<11&&c.bfDay!==S.day){const w=FOODS[wishOf(k)];return [k==='naz'?`💭 Human. My ${w.n}. Now. ${w.e}`:`💭 ${w.n[0].toUpperCase()+w.n.slice(1)}?? ${w.n[0].toUpperCase()+w.n.slice(1)}?? ${w.n.toUpperCase()}?? ${w.e}`,'bf']}
+ if(lunchDue(k)&&!SLEEPS.includes(r.state)){const w=FOODS[lunchOf(k)];return [k==='naz'?`💭 It’s lunchtime. ${w.n[0].toUpperCase()+w.n.slice(1)}, please. ${w.e}`:`💭 LUNCH?? ${w.n.toUpperCase()}?? ${w.e}`,'bf']}
  if(isMad(k)){const why=c.madWhy;return [k==='naz'?(why==='stolen'?'He ATE my breakfast. I’m not speaking to anyone. 😾':why==='missed'?'No breakfast. I will remember this. 😾 …unless there’s a treat.':'Wrong breakfast. I’m STILL mad. 😾 (…a treat might help)'):(why==='missed'?'You forgot my breakfast… 😿':'I wanted '+FOODS[wishOf(k)].n+'… still sad 😿'),'md']}
  if(c.food<30&&b.food<5)return ['My bowl is empty… 🥺','fd'];
  if(c.water<30&&b.water<5)return ['Water please 💧','wa'];
  if(c.health<45)return ['I don’t feel so good… 🤒','he'];
  if((S.mess||[]).length>=5)return [k==='naz'?'The floor is a MESS. I am a princess. 😾':'Fluffy floor… wet paws… 😿','ms'];
  if(lumpsN()>=4)return [k==='naz'?'The litter box. Is. Disgusting. 😾':'Ew, the litter box 😿','li'];
+ if(c.eyes<35)return [k==='naz'?'My eyes are all crusty… wipe them? 🥺👁️':'Something’s in my eye 😿👁️','ey'];
  if(c.fur<35)return [k==='naz'?'My fur is in KNOTS. Brush me 😿':'I look like a dandelion 🌼 brush pls?','fu'];
  if(c.clean<35)return [k==='naz'?'I’m… a bit grubby. Don’t look.':'I rolled in something 😼','cl'];
  if(c.nails>70)return ['My claws are sooo long ✂️','na'];
@@ -1435,7 +1496,7 @@ function buildUI(){
  <div class="info" id="in-${k}"></div></div>`}).join('');
  KEYS.forEach(k=>$('#card-'+k).onclick=e=>{if(e.target.closest('.callvet')){e.stopPropagation();select(k);SFX.blip();openPhone(k);return}if(e.target.closest('.makeup')){e.stopPropagation();select(k);shopTab='treats';SFX.blip();openShop();return}select(k);SFX.blip();setViewFor(k)});
  document.querySelectorAll('.rg').forEach(b=>b.onclick=e=>{e.stopPropagation();ringAct(b.dataset.k,b.dataset.s)});
- const T=[['breakfast','🍳','Breakfast'],['brush','✨','Brush'],['bath','🛁','Bath'],['nails','✂️','Nails'],['phone','📞','Call vet'],['tuck','🛏️','Tuck in'],['night','🌙','Goodnight']];const CB=['breakfast','brush','bath','nails','phone','tuck'];
+ const T=[['breakfast','🍳','Breakfast'],['brush','✨','Brush'],['bath','🛁','Bath'],['nails','✂️','Nails'],['eyes','👁️','Eyes'],['phone','📞','Call vet'],['tuck','🛏️','Tuck in'],['night','🌙','Goodnight']];const CB=['breakfast','brush','bath','nails','eyes','phone','tuck'];
  const T2=[['tv','📺','TV'],['laser','🔴','Laser'],['play','🪶','Play'],['more','🎒','More']];
  $('#toolbar').innerHTML=`<button class="tb who" id="tb-who" title="Switch kitty"><span class="e"></span><span class="l"></span></button><div class="sep"></div>`+T.map(([a,e,l])=>`<button class="tb${CB.includes(a)?' cb':''}" id="tb-${a}" data-a="${a}"><span class="e">${e}</span><span class="l">${l}</span></button>`).join('')+'<div class="sep"></div>'+T2.map(([a,e,l])=>`<button class="tb fun" id="tb-${a}" data-a="${a}"><span class="e">${e}</span><span class="l">${l}</span></button>`).join('');
  document.querySelectorAll('.tb[data-a]').forEach(b=>b.onclick=()=>{SFX.blip();act(b.dataset.a)});
@@ -1464,20 +1525,20 @@ function updUI(){renderRoomTabs();renderNav();
   let [th,key]=thoughtOf(k);if(key==='ok'){if(r.thKey!=='ok'||now>r.thT){r.thLine=pick(HAPPY[k]);r.thT=now+9}th=r.thLine}else r.thLine=th;r.thKey=key;
   const thEl=$('#th-'+k);if(thEl.textContent!==th){thEl.textContent=th;thEl.classList.remove('pop');void thEl.offsetWidth;thEl.classList.add('pop')}thEl.classList.toggle('urgent',!['ok','z','tv','cu','fe','zm','f2','lk','lz','hd'].includes(key));
   const avs=$(`#card-${k} .av svg`);if(avs&&r.cls&&avs.getAttribute('class')!==r.cls.replace(/ ?back/,''))avs.setAttribute('class',r.cls.replace(/ ?back/,''));
-  const w=FOODS[wishOf(k)];const bf=isMad(k)?`<span class="warn makeup" data-k="${k}">😾 Mad — tap to give a treat 🍣</span>`:c.bfDay===S.day?`<span>${w.e} Breakfast ✓</span>`:(h>=4&&h<11?`<span class="warn">💭 Wants ${w.e} ${w.n}!</span>`:`<span>💭 Breakfast 6–11 AM</span>`);
+  const w=FOODS[wishOf(k)];const bf=isMad(k)?`<span class="warn makeup" data-k="${k}">😾 Mad — tap to give a treat 🍣</span>`:c.bfDay===S.day?`<span>${w.e} Breakfast ✓</span>`:(h>=4&&h<11?`<span class="warn">💭 Wants ${w.e} ${w.n}!</span>`:`<span>💭 Breakfast 6–11 AM</span>`);const lw=FOODS[lunchOf(k)];const lunchC=lunchDue(k)?`<span class="warn">🥪 Lunch: wants ${lw.e} ${lw.n}!</span>`:isLunchH(h)&&c.lunchDay===S.day?`<span>${lw.e} Lunch ✓</span>`:'';
   const vd=VETGAP-(S.day-c.lastVet);const vet=vd<=0?'<span class="warn">🩺 Vet checkup due!</span>':`<span>🩺 Vet in ${vd}d</span>`;
-  const needs=[];if(c.food<35)needs.push('hungry');if(c.water<35)needs.push('thirsty');if(c.fun<35)needs.push('bored');if(c.clean<35)needs.push('needs a bath');if(c.fur<35)needs.push('tangled fur');if(c.energy<25)needs.push('sleepy');if(c.nails>70)needs.push('long nails');if(c.health<50)needs.push('not feeling well');
+  const needs=[];if(c.food<35)needs.push('hungry');if(c.water<35)needs.push('thirsty');if(c.fun<35)needs.push('bored');if(c.clean<35)needs.push('needs a bath');if(c.fur<35)needs.push('tangled fur');if(c.energy<25)needs.push('sleepy');if(c.nails>70)needs.push('long nails');if(c.eyes<40)needs.push('teary eyes');if(c.health<50)needs.push('not feeling well');
   const bw=S.bowls[k];const bowl=(bw.food<8?'<span class="warn">🥣 Bowl empty</span>':'')+(bw.water<8?'<span class="warn">💧 Water empty</span>':'');
-  const lit=(sick(k)?`<span class="warn callvet">🤒 Acting strange — tap to 📞 call the vet</span>`:'')+(lumpsN()>=3?'<span class="warn">🧹 Scoop the litter</span>':'')+((S.mess||[]).length>=4?'<span class="warn">🌀 Messy floor</span>':'');
-  const inH=bf+vet+bowl+lit;const ie=$('#in-'+k);if(ie._h!==inH){ie._h=inH;ie.innerHTML=inH}
+  const lit=(c.eyes<40&&!sick(k)?'<span class="warn">👁️ Wipe eyes</span>':'')+(sick(k)?`<span class="warn callvet">🤒 Acting strange — tap to 📞 call the vet</span>`:'')+(lumpsN()>=3?'<span class="warn">🧹 Scoop the litter</span>':'')+((S.mess||[]).length>=4?'<span class="warn">🌀 Messy floor</span>':'');
+  const inH=bf+lunchC+vet+bowl+lit;const ie=$('#in-'+k);if(ie._h!==inH){ie._h=inH;ie.innerHTML=inH}
  });
  const both=KEYS.every(k=>R[k].state==='tucked');const c=S.cats[sel],rs=R[sel].state;
  $('#tb-night').classList.toggle('hide',!both);$('#tb-night').classList.toggle('glow',both);
- const bfOk=h>=6&&h<11&&c.bfDay!==S.day;
+ const bfOk=h>=6&&h<11&&c.bfDay!==S.day||lunchDue(sel);const tbb=$('#tb-breakfast');const lbl=isLunchH(h)?['🥪','Lunch']:['🍳','Breakfast'];if(tbb._m!==lbl[1]){tbb._m=lbl[1];tbb.querySelector('.e').textContent=lbl[0];tbb.querySelector('.l').textContent=lbl[1]}
  $('#tb-breakfast').classList.toggle('glow',bfOk);$('#tb-breakfast').classList.toggle('dim',!bfOk);
  const bed=(h>=20||h<6||c.energy<=35||rs==='nap'||rs==='snooze'||rs==='bedsleep')&&rs!=='tucked';$('#tb-tuck').classList.toggle('glow',(h>=21||h<5)&&bed);$('#tb-tuck').classList.toggle('dim',!bed);
  $('#tb-phone').classList.toggle('glow',vetDue(sel));$('#tb-phone').classList.toggle('sickglow',!!sick(sel));
- $('#tb-nails').classList.toggle('dim',c.nails<30);$('#tb-bath').classList.toggle('dim',c.clean>=92);$('#tb-brush').classList.toggle('dim',c.fur>=94);
+ $('#tb-nails').classList.toggle('dim',c.nails<30);$('#tb-eyes').classList.toggle('dim',c.eyes>=90);$('#tb-eyes').classList.toggle('glow',c.eyes<35);$('#tb-bath').classList.toggle('dim',c.clean>=92);$('#tb-brush').classList.toggle('dim',c.fur>=94);
   KEYS.forEach(j=>['food','water'].forEach(kd=>H[j].bowls[kd].classList.toggle('empty',S.bowls[j][kd]<8)));
  $('#tb-play').classList.toggle('dim',c.energy<15||rs==='tucked'||rs==='nap');
 }
@@ -1517,7 +1578,7 @@ function decide(k){if((R[k].room||'living')!=='living')return decideRoom(k);if(R
  if(c.energy<18||(late&&c.energy<75)){goHome(k,'nap');return}
  if(il&&il.noDrink&&c.water<55&&Math.random()<.5){say(k,pick(ILL.nodrink.say),1.8)}
  if(c.water<55&&b.water>3&&!(il&&il.noDrink)){goBowl(k,k,'water');if(k==='pash'&&Math.random()<.2)setTimeout(()=>{if(R.pash.state==='drink'){say('pash','*splish splash* 💦',1.8);SFX.splash();addMess('water',CATS.pash.bowls.water+rand(10,45),rand(612,616))}},1600);return}
- if(il&&il.noEat&&c.food<55){if(Math.random()<.5)say(k,pick(il.say),1.8)}
+ if(il&&il.noEat&&c.food<55){if(Math.random()<.5)say(k,pick(il.say),1.8)}if(il&&il.eyes&&Math.random()<.3)say(k,pick(il.say),1.8);
  else if(c.food<55){if(b.food>3){goBowl(k,k,'food');return}
   if(k==='pash'&&S.bowls.naz.food>10&&Math.random()<.6&&startSneak(false))return;
   if(Math.random()<.6){say(k,'My bowl is empty! 🥺');SFX.meow(k,'sad',.6)}}
@@ -1554,11 +1615,12 @@ function endTimed(k){const r=R[k],c=S.cats[k];if(r.state==='beg')r.arc=0;
  r.state='idle';r.spot=null;r.nextThink=now+rand(.5,1.5)}
 function wakeAll(){KEYS.forEach(k=>{const r=R[k];if(r.state==='tucked'||r.state==='nap'||r.state==='bedsleep'){r.state='idle';r.nextThink=now+rand(.3,2)}})}
 function onHour(h){
+ if(h===12)setTimeout(()=>{if(KEYS.some(lunchDue)){toast('🥪 Lunchtime! Check their dream bubbles 💭 — Banoo usually wants tuna 🐟',4.5,true);KEYS.forEach((k,i)=>setTimeout(()=>{if(lunchDue(k)&&free(k)){say(k,`Lunch? ${FOODS[lunchOf(k)].e}🥺`,2.6);SFX.meow(k,'sad',.7)}},600+i*800))}},400);
  if(h===7){wakeAll();toast('☀️ Good morning! Check their dream bubbles 💭 — give each kitty exactly what they want for breakfast!',5);KEYS.forEach((k,i)=>setTimeout(()=>{if(S.cats[k].bfDay!==S.day){say(k,`Breakfast? ${FOODS[wishOf(k)].e}🥺`,3);SFX.meow(k,'sad',.8)}},800+i*900))}
  if(h>=8&&h<=10)KEYS.forEach((k,i)=>{if(S.cats[k].bfDay!==S.day&&free(k)){setTimeout(()=>{say(k,`Where's my ${FOODS[wishOf(k)].n}?? 🥺`,2.6);SFX.meow(k,'sad',.7)},i*700)}});
  if(h===11)KEYS.forEach(k=>{if(S.cats[k].bfDay!==S.day&&!sick(k)){S.cats[k].bfDay=S.day;makeMad(k,'missed');say(k,'No breakfast?! 😾',3);toast(`😾 ${CATS[k].name} never got breakfast — ${CATS[k].pron}’s mad at you! A treat 🍣 might cheer ${CATS[k].her==='her'?'her':'him'} up.`,4.5,true)}});
  if(!S.illSeen&&h>=10&&h<=19&&!KEYS.some(k=>S.cats[k].ill)&&Math.random()<.45)getSick(pick(KEYS));
- if(h>=8&&h<=20)KEYS.forEach(k=>{const c=S.cats[k];if(!c.ill&&!KEYS.some(j=>S.cats[j].ill)&&Math.random()<.028+(c.health<50?.03:0)+(c.clean<25?.01:0))getSick(k)});
+ if(h>=8&&h<=20)KEYS.forEach(k=>{const c=S.cats[k];if(!c.ill&&!KEYS.some(j=>S.cats[j].ill)&&c.eyes<22&&Math.random()<.12){getSick(k,'eyeinf');return}if(!c.ill&&!KEYS.some(j=>S.cats[j].ill)&&Math.random()<.028+(c.health<50?.03:0)+(c.clean<25?.01:0))getSick(k)});
  if(h>=9&&h<=20&&!KEYS.some(k=>R[k].state==='hiding')&&!F.active&&!LZ.active&&!P.active&&Math.random()<.14){const cand=KEYS.filter(k=>['idle','walk','sit','groom','perch','sofa','perch2','tub','sink'].includes(R[k].state)&&!(sick(k)&&sick(k).lazy));if(cand.length)startHide(pick(cand))}
  if(h===20)toast('🌆 Evening! Tuck the kitties into bed when they get sleepy 🛏️',4);
  if(h===23&&!KEYS.every(k=>R[k].state==='tucked'))toast('🌙 It’s late! Tuck them in so they sleep cozy');
@@ -1724,7 +1786,7 @@ function act(a){const k=sel;
  if(a==='laser')return startLaser();
  if(a==='tuck')return tuck(k);
  if(!ready(k))return;
- ({breakfast:prepBreakfast,play:startPlay,brush:openBrush,bath:bathTime,nails:openNails,vet:openVet,tuck})[a](k);
+ ({breakfast:prepBreakfast,eyes:openEyes,play:startPlay,brush:openBrush,bath:bathTime,nails:openNails,vet:openVet,tuck})[a](k);
 }
 function tuck(k){const h=hourF(),c=S.cats[k],r=R[k];
  if(F.active||P.active||LZ.active){toast('Not right now — the kitties are busy! 😼',2,true);return}
@@ -1757,10 +1819,21 @@ function catPoint(region){for(let i=0;i<40;i++){let x,y;
  else{if(Math.random()<.6){x=rand(56,144);y=rand(126,184)}else{const a=rand(-175,-5)*Math.PI/180,d=rand(26,42);x=100+Math.cos(a)*d;y=88+Math.sin(a)*d}}
  const nearEye=Math.hypot(x-78,y-90)<17||Math.hypot(x-122,y-90)<17||(Math.abs(x-100)<12&&y>88&&y<118);if(!nearEye)return {x,y}}return {x:100,y:150}}
 
-function openFridge(k){const n=CATS[k];
- openOverlay(`<div class="panel small" style="width:640px"><button class="x" id="mgX">✕</button><h2>🧊 Breakfast for ${n.name}</h2><p>💭 Check ${n.her} dream bubble — what does ${n.pron} want <b>today</b>?</p><div class="foods" style="flex-wrap:wrap">${Object.keys(FOODS).map(f=>`<button data-f="${f}">${FOODS[f].e}<span>${FOODS[f].n[0].toUpperCase()+FOODS[f].n.slice(1)}</span></button>`).join('')}</div><p style="font-size:13px;margin-top:8px">Wrong food = mad for hours 😾</p></div>`);
- ov.querySelectorAll('.foods button').forEach(b=>b.onclick=()=>serve(k,b.dataset.f));
+function openFridge(k,meal){const n=CATS[k];if(!meal&&lunchDue(k))meal='lunch';const L=meal==='lunch';
+ openOverlay(`<div class="panel small" style="width:640px"><button class="x" id="mgX">✕</button><h2>🧊 ${L?'Lunch':'Breakfast'} for ${n.name}</h2><p>💭 Check ${n.her} dream bubble — what does ${n.pron} want <b>today</b>?</p><div class="foods" style="flex-wrap:wrap">${Object.keys(FOODS).map(f=>`<button data-f="${f}">${FOODS[f].e}<span>${FOODS[f].n[0].toUpperCase()+FOODS[f].n.slice(1)}</span></button>`).join('')}</div><p style="font-size:13px;margin-top:8px">${L?'Lunch is a bonus treat 🥪 — wrong food just gets a grumpy look':'Wrong food = mad for hours 😾'}</p></div>`);
+ ov.querySelectorAll('.foods button').forEach(b=>b.onclick=()=>L?serveLunch(k,b.dataset.f):serve(k,b.dataset.f));
 }
+function serveLunch(k,item){closeOverlay();const c=S.cats[k],n=CATS[k],r=R[k],want=lunchOf(k),W=FOODS[want],I=FOODS[item];
+ KEYS.forEach(j=>{if(R[j].state==='beg'){R[j].until=now+1.5}});
+ if(item==='milk'){toast('🙅 No milk! Most grown-up cats are lactose intolerant — it upsets their tummies.',4.5,true);return}
+ if(!lunchDue(k)){toast(c.lunchDay===S.day?`${n.name} already had lunch 😋`:'🥪 Lunch is served 12–2 PM',2.5,true);return}
+ if(sick(k)&&sick(k).noEat){say(k,'I don’t feel like eating… 😿',2.4);toast(`🤒 ${n.name} won’t eat — something might be wrong. Maybe 📞 call the vet?`,4,true);return}
+ c.lunchDay=S.day;const right=item===want;
+ if(r.room==='kitchen'||r.state==='beg'){r.state='idle';r.arc=0;r.spot=null;r.room='living';r.x=975;r.y=560;r.jump=null}if(VIEW==='kitchen')setView('living',-1);
+ H[k].bowls.food.querySelector('.special').innerHTML=`<text x="35" y="16" text-anchor="middle" font-size="18">${I.e}</text>`;SPEC[k]=true;cancel(k);r.spot=null;
+ if(right){stat('lunchRight');addLove(6);c.fun=Math.min(100,c.fun+10);c.food=Math.min(100,c.food+15);SFX.meow(k,'norm');say(k,k==='naz'?(want==='tuna'?'TUNA. For LUNCH. Correct. 🐟💕':`${W.n[0].toUpperCase()+W.n.slice(1)} for lunch ${W.e}💕`):`${W.n.toUpperCase()} LUNCH!! ${W.e}💕`,2.4);toast(`🥪 Perfect lunch! ${n.name} loves you 💕 (+6 💗)`,2.6,true)}
+ else{r.grumpyUntil=now+4;c.fun=Math.max(0,c.fun-4);c.food=Math.min(100,c.food+10);say(k,k==='naz'?`…${I.n}. I wanted ${W.n}. 😑`:`…oh. ${I.n}. I wanted ${W.n} 😿`,2.8);toast(`😑 ${n.name} wanted ${W.e} ${W.n} for lunch — no big deal, just a grumpy look`,3.4,true)}
+ walkTo(k,n.bowls.food,588,()=>{if(!SPEC[k]){r.state='idle';return}r.state='feast';r.until=now+4;if(right)SFX.purr(.7,2)},1.6)}
 function serve(k,item){tutEv('served');closeOverlay();const c=S.cats[k],n=CATS[k],r=R[k],h=hourF(),want=wishOf(k),W=FOODS[want],I=FOODS[item];
  KEYS.forEach(j=>{if(R[j].state==='beg'){R[j].until=now+1.5}});
  if(item==='milk'){toast('🙅 No milk! Most grown-up cats are lactose intolerant — it upsets their tummies.',4.5,true);return}
@@ -1793,6 +1866,26 @@ function openBrush(k){const c=S.cats[k],n=CATS[k];if(c.fur>=94){toast(`${n.name}
  const iv=setInterval(()=>svg.classList.toggle('happy',now<purr||!left),100);mgCleanup=()=>clearInterval(iv);
  function done(){stat('brushes');c.fur=100;c.fun=Math.min(100,c.fun+6);addLove(8);const rr=R[k];for(let i=0;i<(k==='naz'?2:1);i++)addMess('fur',rr.x+rand(-60,60),clamp(rr.y+rand(-5,18),505,612),k);finish(`So fluffy! ${n.name} is purring 💕`,['So much loose fur came off — vacuum it up from the floor 🌀'])}
  ov._onX=()=>{c.fur=Math.max(c.fur,100-(left/cnt)*(100-f0));closeOverlay()};
+}
+
+/* Eyes */
+const PAD=`<svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="22" fill="#fff" stroke="#e6dce8" stroke-width="2.5"/><circle id="padDirt" cx="27" cy="27" r="16" fill="#c98f5e" opacity="0"/><path d="M14 22 q6 -4 12 0 M28 32 q6 -4 12 0 M18 34 q4 -3 8 0" stroke="#efe6ef" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+function openEyes(k){const c=S.cats[k],n=CATS[k];if(c.eyes>=90){toast(`${n.name}’s eyes are bright and clean 👁️✨`,2.5,true);return}
+ const SC2=2.4,per=c.eyes<40?3:c.eyes<70?2:1,inner=k==='naz'?[[90,98],[110,98]]:[[92,95],[108,95]],e0=c.eyes;
+ openOverlay(`<div class="panel mg">${mgHead('👁️ Wiping '+n.name+'’s eyes',(k==='naz'?'Persian eyes get teary! ':'')+'Hold down and wipe <b>slowly</b> over the gunk. Too fast and '+n.pron+' flinches!')}<div class="mgArea bg-brush" id="mgA"><div class="mgface" id="mgC">${catSVG(k)}</div><div class="spdL">🐢 gentle · too fast 💨</div><div class="speedo" id="spd"><i></i></div><div class="tool" id="tool" style="transform:translate(-27px,-27px)">${PAD}</div></div></div>`);
+ const A=$('#mgA'),C=$('#mgC'),T=$('#tool'),svg=C.querySelector('svg');svg.querySelector('.tears').setAttribute('opacity',0);const sp=[];
+ inner.forEach(([x,y],i)=>{for(let j=0;j<per;j++){const px=x+(i?1:-1)*j*4,py=y+j*7;const t=el('div','goopy',null,C);t.style.left=(px*SC2-9)+'px';t.style.top=(py*SC2-9)+'px';sp.push({el:t,x:px*SC2,y:py*SC2,hp:100})}});
+ const cnt=sp.length;let left=cnt,down=false,last=null,lastT=0,flinch=0,flT=0,vel=0,dirt=0;
+ const mv=e=>{const p=local(e,A);T.style.left=p.x+'px';T.style.top=p.y+'px';const t=performance.now();if(!down){last=p;lastT=t;return}
+  const d=last?Math.hypot(p.x-last.x,p.y-last.y):0,dt=Math.max(8,t-lastT);last=p;lastT=t;vel=vel*.6+(d/dt)*.4;$('#spd i').style.width=clamp(vel/1.6*100,4,100)+'%';$('#spd').classList.toggle('fast',vel>1.1);
+  const cx=p.x-C.offsetLeft,cy=p.y-C.offsetTop;
+  if(vel>1.1&&now>flT&&sp.some(s=>s.hp>0&&Math.hypot(cx-s.x,cy-s.y)<70)){flT=now+1;flinch++;svg.classList.add('grumpy');C.classList.remove('flinch');void C.offsetWidth;C.classList.add('flinch');SFX.meow(k,'grr',.5);vib(30);
+   $('#mgSub').innerHTML=pick(k==='naz'?['😾 GENTLY, human.','😾 Hey! Slowly…','😾 That was rude.']:['🙀 Eep! Slower please!','😿 Too fast!','🙀 Gentle!']);setTimeout(()=>svg.classList.remove('grumpy'),900);clearTimeout(mv._t);mv._t=setTimeout(()=>{const m=$('#mgSub');if(m)m.innerHTML='Wipe <b>slowly</b> — watch the speed bar 🐢'},1600);return}
+  if(vel<=1.1)sp.forEach(s=>{if(s.hp<=0)return;if(Math.hypot(cx-s.x,cy-s.y)<30){s.hp-=d*1.6+.6;s.el.style.opacity=Math.max(0,s.hp/100);if(s.hp<=0){left--;s.el.remove();dirt=Math.min(.7,dirt+.7/cnt);$('#padDirt').setAttribute('opacity',dirt.toFixed(2));fx('✨',p.x,p.y-10,A,20);tone(1000,1400,.08,.05);bar((cnt-left)/cnt);if(left===Math.floor(cnt/2)){svg.classList.add('happy');SFX.purr(.5,1.4)}if(!left)done()}}})};
+ A.onpointerdown=e=>{down=true;try{A.setPointerCapture(e.pointerId)}catch(_){}last=local(e,A);lastT=performance.now();vel=0;mv(e)};A.onpointermove=mv;A.onpointerup=A.onpointercancel=()=>{down=false;vel=0;$('#spd i').style.width='4%';$('#spd').classList.remove('fast')};
+ function done(){stat('eyes');c.eyes=100;c.fun=Math.min(100,c.fun+4);addLove(flinch?5:8);svg.classList.add('happy');SFX.purr(.7,2);
+  finish(`${n.name}’s eyes are bright & clean 👁️✨`,[flinch?`😾 ${n.name} flinched ${flinch} time${flinch>1?'s':''} — go slower next time`:'🌟 So gentle! Not a single flinch (+3 💗)',k==='naz'?'🎀 Persians’ flat faces make their eyes extra teary — wipe Banoo’s every couple of days':'🧡 Pash’s eyes stay pretty clear — a wipe every few days is plenty','👁️ Leave eyes gunky too long and they can get infected'])}
+ ov._onX=()=>{c.eyes=Math.max(c.eyes,e0+(100-e0)*(cnt-left)/cnt);closeOverlay()};
 }
 
 /* Bath */
@@ -1837,14 +1930,14 @@ function openNails(k){const c=S.cats[k],n=CATS[k];if(c.nails<30){toast(`${n.name
 }
 
 /* Vet */
-function openVet(k,reason){const c=S.cats[k],n=CATS[k],illT=c.ill&&c.ill.t,guess=reason&&reason!=='check'?reason:null;
+function openVet(k,reason){const c=S.cats[k],n=CATS[k],illT=c.ill&&c.ill.t,guess=reason&&reason!=='check'?reason:null,unsure=guess==='unwell';
  openOverlay(`<div class="panel mg">${mgHead('🩺 Vet checkup — '+n.name,vetDue(k)?'Time for the routine checkup!':'Not due yet, but a checkup never hurts!')}<div class="mgArea bg-vet" id="mgA">
- <ul class="vetSteps" id="vs"></ul><div class="doc"><div class="face">👩‍⚕️</div><div id="docT">${illT?(guess===illT?`You were right to call — let’s see that ${ILL[illT].n.toLowerCase()}!`:`Hello ${n.name}! Let’s find out what’s wrong.`):`Hello ${n.name}! Let’s take a look at you.`}</div></div><div class="table"></div><div class="mgcat" id="mgC" style="top:30px">${catSVG(k,k==='naz'?'grumpy':'')}</div></div></div>`);
+ <ul class="vetSteps" id="vs"></ul><div class="doc"><div class="face">👩‍⚕️</div><div id="docT">${illT?(unsure?`Not sure what’s wrong? No problem — let’s find out together!`:guess===illT?`You were right to call — let’s see that ${ILL[illT].n.toLowerCase()}!`:`Hello ${n.name}! Let’s find out what’s wrong.`):`Hello ${n.name}! Let’s take a look at you.`}</div></div><div class="table"></div><div class="mgcat" id="mgC" style="top:30px">${catSVG(k,k==='naz'?'grumpy':'')}</div></div></div>`);
  const A=$('#mgA'),C=$('#mgC'),svg=C.querySelector('svg');A.style.cursor='default';
  const steps=[
   {t:'⚖️ Weigh',d:`Tap the scale button to weigh ${n.name}.`,type:'btn',res:'Healthy weight ✔'},
   {t:'👂 Ears',d:'Tap both ears to check inside.',spots:n.ears,res:c.clean<40?'Ears a bit dirty — bath soon!':'Ears are clean ✔'},
-  {t:'👀 Eyes',d:'Tap each eye.',spots:n.eyes,res:k==='naz'?'A little teary (normal for Persians) — wipe her eyes gently ✔':'Bright and clear ✔'},
+  {t:'👀 Eyes',d:'Tap each eye.',spots:n.eyes,res:illT==='eyeinf'?'Red and goopy — an eye infection 👁️':c.eyes<45?'Quite gunky — wipe '+n.her+' eyes more often 👁️':k==='naz'?'A little teary (normal for Persians) ✔':'Bright and clear ✔'},
   {t:'🦷 Teeth',d:'Tap the mouth to peek at the teeth.',spots:[n.mouth],res:'Pearly white ✔'},
   {t:'🩺 Heart',d:'Tap the stethoscope on the chest 4 times to listen to the heartbeat.',type:'hold',spot:[100,150],res:'Strong, happy heartbeat ✔'}];
  if(illT)steps.push({t:'💊 Medicine',d:'Tap the pill to give the medicine (cats HATE pills…)',type:'pill',res:`Diagnosis: ${ILL[illT].e} ${ILL[illT].n} — medicine given 💊`});
@@ -1859,8 +1952,8 @@ function openVet(k,reason){const c=S.cats[k],n=CATS[k],illT=c.ill&&c.ill.t,guess
    h.onpointerdown=e=>{e.stopPropagation();n++;h.style.setProperty('--p',(n*25)+'%');fx('💗',C.offsetLeft+s.spot[0]*SC,C.offsetTop+s.spot[1]*SC-30,A);SFX.thump();$('#docT').textContent=['ba-dum…','ba-dum… ba-dum…','ba-dum… ba-dum… ba-dum…','💗 ba-dum!'][n-1];if(n>=4){h.onpointerdown=null;setTimeout(()=>next(s.res),350)}};return}
   let left=s.spots.length;s.spots.forEach(([x,y])=>{const h=el('div','hot',null,C);h.style.left=x*SC+'px';h.style.top=y*SC+'px';h.onpointerdown=()=>{h.remove();SFX.blip();fx('✔️',C.offsetLeft+x*SC,C.offsetTop+y*SC,A,22);if(--left===0)next(s.res)}})}
  function end(){const tips=[];if(c.clean<50)tips.push('🛁 A bath would be nice soon');if(c.fur<50)tips.push(k==='naz'?'✨ Persians need brushing almost every day':'✨ A good brushing would help');if(c.nails>65)tips.push('✂️ Nails are getting long');if(c.food<40)tips.push('🍽️ Keep the food bowl topped up');if(c.water<40)tips.push('💧 More fresh water please');if(S.lumps.length>=4)tips.push('🧹 Keep the litter box clean');
-  let extra=[];if(illT){if(!c.hist)c.hist=[];c.hist.push({d:S.day,t:illT});c.ill=null;extra.push(guess===illT?'🌟 Great observation — you spotted the symptoms! (+10 💗)':guess?`🔎 It wasn’t “${ILL[guess].sym.toLowerCase()}” — but the vet found the real problem!`:'🔎 Good thing you came in — the vet found a problem!');if(guess===illT){addLove(10);stat('diag')}extra.push(`${n.name} will feel better soon 💕`)}
-  else if(guess)extra.push('🍀 Nothing wrong at all — maybe just a mood. Better safe than sorry!');
+  let extra=[];if(illT){if(!c.hist)c.hist=[];c.hist.push({d:S.day,t:illT});c.ill=null;extra.push(guess===illT?'🌟 Great observation — you spotted the symptoms! (+10 💗)':unsure?`🩺 Good call bringing ${n.him||(n.pron==='he'?'him':'her')} in! Next time watch for: ${ILL[illT].ex.toLowerCase()}`:guess&&ILL[guess]?`🔎 It wasn’t “${ILL[guess].sym.toLowerCase()}” — the real sign was: ${ILL[illT].ex.toLowerCase()}`:'🔎 Good thing you came in — the vet found a problem!');if(illT==='eyeinf')c.eyes=100;c.noted={};if(guess===illT){addLove(10);stat('diag')}extra.push(`${n.name} will feel better soon 💕`)}
+  else if(guess)extra.push(unsure?'🍀 Nothing wrong at all — just an off day. Better safe than sorry!':'🍀 Nothing wrong at all — maybe just a mood. Better safe than sorry!');
   stat('vets');c.health=100;if(!illT||reason==='check')c.lastVet=S.day;if(vetDue(k))c.lastVet=S.day;addLove(15);svg.classList.remove('grumpy');svg.classList.add('happy');
   finish(illT?`${n.name} is getting better! 💊`:`${n.name} is healthy! 🎉`,extra.concat(res).concat(tips.length?tips:['🌟 Perfectly healthy and very loved']).concat(['Next checkup in 2 months (60 days) 📅']))}
  list();run();
@@ -1933,7 +2026,7 @@ function endPhoto(){PH.active=false;wrap.classList.remove('photo');$('#photo').c
 function welcome(help){setTimeout(ytReady,0);
  openOverlay(`<div class="panel welcome"><h2 style="font-size:30px">🏡 Naz &amp; Pash's Cozy Home</h2><p>Take care of the two kitties in their apartment!</p>
  <div class="wcats"><div><span style="display:block;transform:scale(.84);transform-origin:50% 100%">${catSVG('naz','blep')}</span>Nazbanoo 🎀</div><div>${catSVG('pash','happy')}Pashmak 🧡</div></div>
- <ul><li>Tap a kitty to pick them, tap again to pet 💕</li><li>💭 Each morning, check their dream bubble — serve exactly that for breakfast (or they get mad — a treat 🍣 makes up for it)</li><li>😼 Pash steals Banoo’s food — tap him to shoo him!</li><li>🥣 Tap a food bowl &amp; pick the right dry food (Persian Kitty or Turkish Van) · 💧 tap water bowls to fill</li><li>🧹 Scoop litter lumps · 🌀 vacuum shed fur · 🧽 mop Pash’s splashes · sweep stray litter</li><li>✨ Fluffy tufts sticking out = time to brush!</li><li>✨ Brush, 🛁 bathe &amp; ✂️ trim nails · 🩺 vet checkup every 2 months</li><li>🤒 If a kitty acts strange, 📞 call the vet (costs 💗)</li><li>🪪 Check their passports · 🪟 they love watching the street</li><li>💥 Fights! Tap the cloud fast to stop them</li><li>💨 Pash gets zoomies — tap him to catch him</li><li>🐱💞🐱 Grow their friendship until they cuddle</li><li>🛍️ Spend 💗 on treats, toys, decor &amp; outfits</li><li>🔴 Laser pointer — both kitties chase it!</li><li>🛏️🛁 Swipe or tap the ‹ › arrows to visit the bedroom &amp; bathroom — and play hide &amp; seek when a kitty hides!</li><li>📒 Collect stickers &amp; keep your 🔥 daily streak · 🎄🎂 seasons, holidays &amp; birthdays</li><li>🍳 Breakfast is prepped in the kitchen — the kitties beg at the counter!</li><li>📺 Turn on the TV — tap it to change channel</li><li>📸 Photo mode with stickers · 🛏️ tuck in at night</li></ul>
+ <ul><li>Tap a kitty to pick them, tap again to pet 💕</li><li>💭 Each morning, check their dream bubble — serve exactly that for breakfast (or they get mad — a treat 🍣 makes up for it)</li><li>😼 Pash steals Banoo’s food — tap him to shoo him!</li><li>🥣 Tap a food bowl &amp; pick the right dry food (Persian Kitty or Turkish Van) · 💧 tap water bowls to fill</li><li>🧹 Scoop litter lumps · 🌀 vacuum shed fur · 🧽 mop Pash’s splashes · sweep stray litter</li><li>✨ Fluffy tufts sticking out = time to brush!</li><li>👁️ Tear stains? Wipe their eyes <b>gently</b> — Banoo’s get teary fast</li><li>🥪 Lunch 12–2 PM is a bonus meal (Banoo usually wants tuna 🐟)</li><li>✨ Brush, 🛁 bathe &amp; ✂️ trim nails · 🩺 vet checkup every 2 months</li><li>🤒 If a kitty acts strange, 📞 call the vet (costs 💗)</li><li>🪪 Check their passports · 🪟 they love watching the street</li><li>💥 Fights! Tap the cloud fast to stop them</li><li>💨 Pash gets zoomies — tap him to catch him</li><li>🐱💞🐱 Grow their friendship until they cuddle</li><li>🛍️ Spend 💗 on treats, toys, decor &amp; outfits</li><li>🔴 Laser pointer — both kitties chase it!</li><li>🛏️🛁 Swipe or tap the ‹ › arrows to visit the bedroom &amp; bathroom — and play hide &amp; seek when a kitty hides!</li><li>📒 Collect stickers &amp; keep your 🔥 daily streak · 🎄🎂 seasons, holidays &amp; birthdays</li><li>🍳 Breakfast is prepped in the kitchen — the kitties beg at the counter!</li><li>📺 Turn on the TV — tap it to change channel</li><li>📸 Photo mode with stickers · 🛏️ tuck in at night</li></ul>
  <div style="display:flex;gap:10px;justify-content:center">${help?'<button class="btn" id="wGo">Back to the kitties 🐾</button><button class="btn alt" id="wNew">Start over</button>':hasSave?'<button class="btn" id="wGo">Continue 🐾</button><button class="btn alt" id="wNew">New game</button>':'<button class="btn" id="wGo">Let’s go! 🐾</button>'}</div></div>`);
  $('#wGo').onclick=()=>{closeOverlay();A();if(window.__recovered){setTimeout(()=>toast('💾 Your save had a problem, so we restored your latest backup.',4,true),300);window.__recovered=false}if(!S.tut&&!help)setTimeout(()=>startTut(false),700);if(streakMsg){setTimeout(()=>toast(streakMsg,4.5,true),600);streakMsg=null}SFX.meow('naz','short',.7);setTimeout(()=>SFX.meow('pash','norm',.7),350)};
  const nw=$('#wNew');if(nw)nw.onclick=()=>{const m=S.muted,st=S.set;S=DEF();S.muted=m;S.set=st;lastHour=7;Object.keys(toyEls).forEach(t=>{toyEls[t].forEach(e=>e.remove());delete toyEls[t]});renderLumps();renderLumps2();renderMess();applyDecor();tvBuild();KEYS.forEach(k=>{const r=R[k];if(r.hint){r.hint.remove();r.hint=null}r.room='living'});setView('living');
@@ -1946,15 +2039,16 @@ function tick(dt){
  const hN=Math.floor(S.min/60);if(hN!==lastHour){lastHour=hN;onHour(hN)}
  KEYS.forEach(k=>{const c=S.cats[k],r=R[k],sl=SLEEPS.includes(r.state),g=gm/60;
   c.food-=(sl?2.5:5)*g;c.water-=(sl?3:6)*g;if(!sl)c.fun-=(isMad(k)?6.5:4)*g;c.clean-=1.2*g;c.fur-=CATS[k].furDecay*g;
-  c.energy+=(sl?(r.state==='tucked'?16:11):(r.state==='play'||r.state==='zoom'||r.state==='laser'?-30:-4))*g;c.nails+=1.2*g;if(!sl)c.potty+=gm;
+  c.energy+=(sl?(r.state==='tucked'?16:11):(r.state==='play'||r.state==='zoom'||r.state==='laser'?-30:-4))*g;c.nails+=1.2*g;c.eyes-=(k==='naz'?1.1:.45)*g*(c.ill&&c.ill.t==='eyeinf'?2:1);if(!sl)c.potty+=gm;
   if(lumpsN()>=5)c.fun-=3*g;
   if((S.mess||[]).length>=5)c.fun-=2*g;
   if(c.ill){c.fun-=1.5*g;const il=ILL[c.ill.t];if(il.lazy&&!sl)c.energy-=6*g;
-   if(now>(r.sickT||0)&&!['fight','zoom','hiding'].includes(r.state)&&!r.away){r.sickT=now+rand(7,12);const p=headPos(k);fx(il.e,p.x+20,p.y-10,stage,24);if(!sl&&Math.random()<.6)say(k,pick(il.say),2);if(il.sneeze&&!sl)sneezeSfx()}}
+   if(now>(r.sickT||0)&&!['fight','zoom','hiding'].includes(r.state)&&!r.away){r.sickT=now+rand(7,12);const p=headPos(k);fx(il.e,p.x+20,p.y-10,stage,24);if(!sl&&Math.random()<.6)say(k,pick(il.say),2);if(il.sneeze&&!sl)sneezeSfx();if(il.vomit&&!sl&&r.y>480&&Math.random()<.35){addMess('puke',r.x+rand(-20,20),clamp(r.y+8,505,612),k);tone(180,90,.25,.05,'sawtooth')}
+   if(!sl&&(r.room||'living')===VIEW&&!r.el.classList.contains('hidden')){if(!c.noted)c.noted={};c.noted[c.ill.t]=(c.noted[c.ill.t]||0)+1}}}
   if(!sl&&r.y>480&&!['tv','fight'].includes(r.state)&&Math.random()<dt*(k==='naz'?1/80:1/140)*(c.fur<40?1.6:1))addMess('fur',r.x+rand(-25,25),clamp(r.y+rand(2,14),505,613),k);
   if(k==='naz'&&!sl&&now>wetT.naz&&(S.mess||[]).some(m=>m.t==='water'&&Math.abs(m.x-r.x)<34&&Math.abs(m.y-r.y)<22)){wetT.naz=now+18;c.fun=Math.max(0,c.fun-3);r.grumpyUntil=now+2.5;say('naz','EW. Wet paws. 😾',2);SFX.meow('naz','grr',.6)}
   let hd=c.ill?-1.5:.6;if(c.food<15||c.water<15)hd=-3;else if(c.clean<20||c.fur<20)hd=-.8;if(vetDue(k))hd=Math.min(hd,-.5);c.health+=hd*g;
-  ['food','water','fun','clean','fur','energy','health','nails'].forEach(s=>c[s]=clamp(c[s],0,100));
+  ['food','water','fun','clean','fur','energy','health','nails','eyes'].forEach(s=>c[s]=clamp(isFinite(c[s])?c[s]:80,0,100));
  });
  if(F.pendingAt&&now>F.pendingAt){F.pendingAt=0;if(KEYS.every(free))startFight()}
  if(F.active){if(F.phase==='approach'&&((F.arr.naz&&F.arr.pash)||now-F.t0>3.5))brawl();else if(F.phase==='brawl'){$('#cloud .ftime i').style.width=clamp((F.end-now)/7*100,0,100)+'%';if(now>F.end)endFight(false)}}
@@ -2004,7 +2098,7 @@ function render(){updCam();tutTick();watchdog();
   r.el.classList.toggle('inh',inH);const away=(r.room||'living')!==VIEW||r.state==='hiding'||r.state==='tunnel';r.el.classList.toggle('away',away);r.away=away;r.flip.style.transform=`scaleX(${r.dir})`;
   const mv=(r.target&&!r.jump&&r.state!=='play')||((r.state==='play'||r.state==='laser')&&r.moving);r.bob.classList.toggle('walk',!!mv&&r.state!=='zoom');r.bob.classList.toggle('zoom',r.state==='zoom');
   const sl=SLEEPS.includes(r.state);
-  const want=(r.state==='tv'||r.state==='window')?'back':'front';if(r.view!==want){r.view=want;r.bob.innerHTML=want==='back'?catBackSVG(k):catSVG(k);r.svg=r.bob.querySelector('svg');r.cls='';r.bhead=r.svg.querySelector('.bhead')}
+  const want=(r.state==='tv'||r.state==='window')?'back':(sl&&r.state!=='tucked'&&!PH.active)?'sleep':'front';if(r.view!==want){r.view=want;r.bob.innerHTML=want==='back'?catBackSVG(k):want==='sleep'?sleepSVG(k):catSVG(k);r.svg=r.bob.querySelector('svg');r.cls='';r.bhead=r.svg.querySelector('.bhead')}
   if(want==='back'&&r.bhead){const tx=r.state==='window'?streetLook:415+18+tvObjX;r.bhead.style.transform=`rotate(${clamp((tx-r.x)/5,-24,24).toFixed(1)}deg)`}
   let cls='catsvg';
   if(PH.active){const p=POSES[PH.pose][0];if(p)cls+=' '+p;if(p==='blep')cls+=' grumpy'}
@@ -2014,11 +2108,11 @@ function render(){updCam();tutTick();watchdog();
   if(sick(k)&&!PH.active)cls+=' sickc';if(cls!==r.cls){r.svg.setAttribute('class',cls);r.cls=cls}
   r.svg.querySelector('.dirt').setAttribute('opacity',c.clean<70?((70-c.clean)/70*.9).toFixed(2):0);
   r.svg.querySelector('.tang').setAttribute('opacity',c.fur<60?((60-c.fur)/60).toFixed(2):0);const ms=r.svg.querySelector('.messy');if(ms)ms.setAttribute('opacity',c.fur<55?Math.min(1,(55-c.fur)/35).toFixed(2):0);
-  r.svg.querySelector('.claws').setAttribute('opacity',c.nails>65?1:0);
+  r.svg.querySelector('.claws').setAttribute('opacity',c.nails>65?1:0);const te=r.svg.querySelector('.tears');if(te){const ey=c.eyes,inf=sick(k)&&c.ill.t==='eyeinf';const o=k==='naz'?.25+(100-ey)/100*.75:Math.max(0,(70-ey)/70);te.setAttribute('opacity',(inf?1:o).toFixed(2));te.querySelector('.goop').setAttribute('opacity',inf||ey<45?1:ey<65?.5:0);te.querySelector('.redeye').setAttribute('opacity',inf?.8:0)}
   H[k].blanket.style.display=r.state==='tucked'?'block':'none';
   if(sl&&now>r.zT&&!PH.active&&!away){r.zT=now+1.6;const p=headPos(k);fx('💤',p.x+18,p.y-6,stage,20)}
   if(!r.dream){r.dream=el('div','dream');r.alert=el('div','alert');r.alert.textContent='❗'}
-  if(dreamShown(k)&&!away){const sl2=SLEEPS.includes(r.state);r.dream.style.display='flex';r.dream.textContent=FOODS[wishOf(k)].e;r.dream.classList.toggle('sleepd',sl2);r.dream.style.left=(r.x+30*s)+'px';r.dream.style.top=(r.y-r.arc-137*s*.8)+'px'}else r.dream.style.display='none';
+  if(dreamShown(k)&&!away){const sl2=SLEEPS.includes(r.state);r.dream.style.display='flex';r.dream.textContent=FOODS[dreamFood(k)].e;r.dream.classList.toggle('lunchd',lunchDue(k));r.dream.classList.toggle('sleepd',sl2);r.dream.style.left=(r.x+30*s)+'px';r.dream.style.top=(r.y-r.arc-137*s*.8)+'px'}else r.dream.style.display='none';
   if(k==='pash'&&isThief()&&!PH.active&&!away){r.alert.style.display='block';r.alert.style.left=r.x+'px';r.alert.style.top=(r.y-r.arc-137*s-34)+'px'}else r.alert.style.display='none';
   if(r.say&&now<r.say.until&&!r.el.classList.contains('hidden')&&!away){r.bub.style.display='block';r.bub.textContent=r.say.t;r.bub.style.left=r.x+'px';r.bub.style.top=(r.y-r.arc-137*s-6)+'px'}else r.bub.style.display='none';
   ['food','water'].forEach(kind=>{const lv=Math.round(S.bowls[k][kind]/10);const b=H[k].bowls[kind];if(b._lv===lv)return;b._lv=lv;const g=b.querySelector('.fill');
