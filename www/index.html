@@ -523,6 +523,29 @@ body.lsphone .tb.who .e svg{width:22px;height:24px}
 #ovl.portrait .foods button{width:120px}
 #ov .reasons .rs:not(.check){flex-direction:row;align-items:center;gap:8px;text-align:left;padding-right:52px}.rs .rse{font-size:22px;flex:none;width:28px;text-align:center}.rs span.rst{position:static;flex:1;display:flex;flex-direction:column;font-weight:600;line-height:1.15;color:#5a3d55;font-size:14px}.rs .rst small{font-weight:400;font-size:11.5px;color:#9a7b94;margin-top:2px}.rs.unsure{background:#fff6e6!important;border-color:#f1c27a!important}
 .notes{margin-top:8px;background:#fffbe9;border:2px dashed #f0d58a;border-radius:12px;padding:6px 10px;font-size:13px;text-align:left}.notes b{display:block;margin-bottom:2px}
+
+/* bigger room: phone = one expanded card + one mini card; landscape = toolbar in the side column */
+body.phone #cards{display:flex;align-items:stretch}
+body.phone .card{min-width:0;transition:flex-basis .25s}
+body.phone .card.sel{flex:1 1 auto}
+body.phone .card:not(.sel){flex:0 0 72px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 4px;position:relative}
+body.phone .card:not(.sel) .rings,body.phone .card:not(.sel) .info,body.phone .card:not(.sel) .think,body.phone .card:not(.sel) .st,body.phone .card:not(.sel) .mtx{display:none}
+body.phone .card:not(.sel) .ctop{flex-direction:column;align-items:center;gap:3px}
+body.phone .card:not(.sel) .cmid{text-align:center;min-width:0}
+body.phone .card:not(.sel) .nm{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:64px;display:flex;flex-direction:column;align-items:center;line-height:1.15}
+body.phone .card:not(.sel):has(.think.urgent)::after{content:'!';position:absolute;top:4px;right:6px;width:16px;height:16px;border-radius:50%;background:#ff6f8a;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;animation:pulse 1.2s infinite}
+body.phone .card.sel .rings{grid-template-columns:repeat(8,1fr);gap:2px}
+body.phone .card.sel .rg svg{width:30px;height:30px}body.phone .card.sel .rg span{height:30px;font-size:12px}
+body.lsphone.lstall #app{grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"h h" "c s" "t s"}
+body.lsphone.lstall #toolbar{flex-wrap:wrap;overflow:visible;justify-content:center;gap:5px;margin-top:4px;align-self:end}
+body.lsphone.lstall .tb{min-width:0;flex:0 0 calc(25% - 5px);padding:5px 2px 4px}
+body.lsphone.lstall .tb.who{flex-basis:calc(50% - 5px)}
+body.lsphone.lstall .sep{display:none}
+body.lsphone:not(.lstall) #app{grid-template-columns:clamp(180px,24vw,260px) minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr);grid-template-areas:"h h h" "c s t"}
+body.lsphone:not(.lstall) #toolbar{flex-direction:column;flex-wrap:nowrap;overflow-y:auto;overflow-x:hidden;margin:0;padding:0 2px 4px;align-self:stretch;justify-content:flex-start;scroll-snap-type:y proximity}
+body.lsphone:not(.lstall) .tb{min-width:58px;width:58px}
+body.lsphone:not(.lstall) .rings{gap:3px 1px}body.lsphone:not(.lstall) .rg svg{width:26px;height:26px}body.lsphone:not(.lstall) .rg span{height:26px;font-size:11px}
+body.lsphone:not(.lstall) .sep{width:auto;height:2px;margin:2px 6px}
 </style>
 </head>
 <body>
@@ -1508,7 +1531,7 @@ function buildUI(){
  $('#muteBtn').textContent=S.muted?'🔇':'🔊';
 }
 function select(k){sel=k;camManT=0;const tb=$('#toolbar');tb.style.setProperty('--cc',CATS[k].col);tb.style.setProperty('--cbg',k==='naz'?'#ffe3f0':'#ffeedd');tb.style.setProperty('--cdk',k==='naz'?'#c2397a':'#b8661a');KEYS.forEach(j=>{$('#card-'+j).classList.toggle('sel',j===k);R[j].el.classList.toggle('sel',j===k)});
- const w=$('#tb-who');w.style.setProperty('--cc',CATS[k].col);w.querySelector('.e').innerHTML=catSVG(k);w.querySelector('.l').textContent=CATS[k].short+' ⇄'}
+ const w=$('#tb-who');w.style.setProperty('--cc',CATS[k].col);w.querySelector('.e').innerHTML=catSVG(k);w.querySelector('.l').textContent=CATS[k].short+' ⇄';if(document.body.classList.contains('phone'))requestAnimationFrame(fit)}
 function barCol(v,inv){if(inv)v=100-v;return v>60?'#7fd38a':v>30?'#ffc857':'#ff6f8a'}
 function statusOf(k){const r=R[k],n=CATS[k],o=CATS[other(k)].short;
  switch(r.state){case 'tucked':return '💤 Tucked in, fast asleep';case 'nap':return '😴 Napping in '+n.her+(k==='naz'?' little bed':' house');case 'snooze':return '😴 Snoozing on the '+TOYS[r.spot].n;case 'box':return '📦 Sitting in the box (if it fits, '+n.pron+' sits)';case 'potty':return '🚽 Busy… privacy please';case 'zoom':return '💨 ZOOMIES!!!';case 'cuddle':case 'cuddleGo':return '🥰 Cuddling with '+o;case 'eat':return r.bowlOf!==k?'😼 Sneaking food from '+CATS[r.bowlOf].short+'’s bowl!':'😋 Eating dry food';case 'drink':return '💧 Drinking water';case 'feast':return isMad(k)?'😾 Eating breakfast (still mad)':`${FOODS[wishOf(k)].e} Enjoying ${n.her} ${FOODS[wishOf(k)].n}!`;case 'treat':return '😋 Munching a treat';case 'perch':return '🌳 Lounging on '+n.her+' cat tree';case 'play':return '🪶 Chasing the feather!';case 'fight':return '😾 FIGHTING!';case 'groom':return '👅 Grooming';case 'batting':return '🧶 Batting the yarn ball';case 'walk':return '🐾 Wandering around';case 'beg':return '🥺 Begging at the counter';case 'chair':return '🪑 Sitting on a kitchen chair';case 'bedsleep':return '😴 Sleeping on the big bed';case 'tunnel':return '🌀 Zooming through the tunnel';case 'sofa':return '🛋️ Lounging on the sofa';case 'perch2':return '🌳 On the bedroom scratching post';case 'sink':return '🚰 Sitting in the sink (classic)';case 'tub':return '🛁 Chilling in the dry bathtub';case 'hiding':return '🙈 Hiding — find me!';case 'sneak':return '😼 Sneaking to Banoo’s bowl… TAP HIM!';case 'laser':return '🔴 Chasing the laser!!';case 'lick':return '💕 Licking Naz (his love language)';case 'licked':return '😑 Getting licked by Pash (secretly loves it)';case 'window':return '🪟 Staring out the window';case 'tv':return '📺 Watching '+(S.tv.on?CH[S.tv.ch].n:'TV');default:return k==='naz'?'😑 Judging you, lovingly':'🐱 Chilling'}}
@@ -2131,11 +2154,11 @@ function fitOv(){const vw=innerWidth,vh=innerHeight,por=vw<700&&vh>vw;let OW,OH;
  ov.style.width=OW+'px';ov.style.height=OH+'px';ov.style.transform=`scale(${KO})`;ov.style.left=((vw-OW*KO)/2)+'px';ov.style.top=((vh-OH*KO)/2)+'px';ov.style.setProperty('--oh',OH+'px');ovl.classList.toggle('portrait',por)}
 function fit(){const vw=innerWidth,vh=innerHeight;if(!vw||!vh)return;const phone=vw<700&&vh>vw;let mode='desk';
  if(!phone){const need=64+190+Math.min(1040,vw-20)*.62+84;if(need>vh)mode=vw/vh>=1.2?'ls':'tab';else if(vh>vw&&vw<1100)mode='tab'}
- const B=document.body;B.classList.toggle('phone',phone);B.classList.toggle('tab',mode==='tab');B.classList.toggle('lsphone',mode==='ls');
+ const B=document.body;B.classList.toggle('phone',phone);B.classList.toggle('tab',mode==='tab');B.classList.toggle('lsphone',mode==='ls');B.classList.toggle('lstall',mode==='ls'&&vh>=560&&vw>=1000);
  const AW=$('#stageBox').clientWidth;VW=1000;let k;
- if(phone){VW=600;k=AW/VW}
+ if(phone){const ac=getComputedStyle($('#app')),avH=Math.max(260,vh-$('header').offsetHeight-$('#cards').offsetHeight-$('#toolbar').offsetHeight-parseFloat(ac.paddingTop)-parseFloat(ac.paddingBottom)-24);VW=clamp(Math.round(620*AW/avH),440,640);k=Math.min(AW/VW,avH/620)}
  else if(mode==='tab'){const avH=Math.max(200,vh-$('header').offsetHeight-$('#cards').offsetHeight-$("#toolbar").offsetHeight-62);VW=clamp(Math.round(620*AW/avH),700,1000);k=Math.min(AW/VW,avH/620)}
- else if(mode==='ls'){const AH=vh-$('header').offsetHeight-$('#toolbar').offsetHeight-22;k=Math.min(AW/1000,AH/620)}
+ else if(mode==='ls'){const AH=vh-$('header').offsetHeight-22;VW=clamp(Math.round(620*AW/AH),820,1000);k=Math.min(AW/VW,AH/620)}
  else k=AW/1000;
  K=k;wrap.style.width=(VW*K)+'px';wrap.style.height=(620*K)+'px';if(VW>=1000)camX=0;else camX=clamp(camX,0,1000-VW);applyCam();fitOv()}
 window.addEventListener('resize',fit);window.addEventListener('orientationchange',()=>setTimeout(fit,250));if(window.visualViewport)visualViewport.addEventListener('resize',fit);
