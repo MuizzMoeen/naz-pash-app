@@ -1,0 +1,23 @@
+name: YouTube Playables bundle
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Playables bundle (SDK loads before game code)
+        run: |
+          mkdir -p playable
+          python3 - <<'PY'
+          s=open('www/index.html',encoding='utf-8').read()
+          s=s.replace('<head>','<head>\n<script src="https://www.youtube.com/game_api/v1"></script>',1)
+          open('playable/index.html','w',encoding='utf-8').write(s)
+          PY
+          ls -la playable
+      - uses: actions/upload-artifact@v4
+        with:
+          name: naz-pash-playable
+          path: playable/

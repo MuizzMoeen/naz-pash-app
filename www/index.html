@@ -421,7 +421,8 @@ body.phone header h1{display:none}
 body.phone header{gap:6px;justify-content:space-between;flex-wrap:nowrap}
 body.phone .pill{font-size:13px;padding:5px 9px;gap:4px}
 body.phone .fb{width:26px}
-.fe2{display:none}body.phone .fe{display:none}body.phone .fe2{display:inline}
+.fe2{display:none}
+body.yt #muteBtn,body.yt .ytHide{display:none!important}body.phone .fe{display:none}body.phone .fe2{display:inline}
 body.phone header{flex-wrap:nowrap;min-width:0}body.phone #clock{min-width:0;overflow:hidden;text-overflow:ellipsis}
 body.phone #friendP{font-size:10px;padding:5px 7px;gap:2px}
 body.phone .pill{padding:5px 7px}
@@ -470,7 +471,7 @@ body.phone .tb .l,body.lsphone .tb .l{font-size:11px}
 body.phone .tb.who,body.lsphone .tb.who{min-width:74px}
 body.phone .sep,body.lsphone .sep{flex:none}
 body.phone .pbar .sk{font-size:20px;padding:1px 2px}
-body.lsphone #app{display:grid;grid-template-columns:210px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"h h" "c s" "c t";column-gap:10px;max-width:none;height:100vh;height:100dvh;padding-top:calc(4px + env(safe-area-inset-top));padding-bottom:calc(4px + env(safe-area-inset-bottom));overflow:hidden}
+body.lsphone #app{display:grid;grid-template-columns:clamp(210px,22vw,330px) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"h h" "c s" "c t";column-gap:10px;max-width:none;height:100vh;height:100dvh;padding-top:calc(4px + env(safe-area-inset-top));padding-bottom:calc(4px + env(safe-area-inset-bottom));overflow:hidden}
 body.lsphone header{grid-area:h;margin-bottom:4px;flex-wrap:nowrap;gap:6px}
 body.lsphone header h1{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 body.lsphone .pill{font-size:12px;padding:3px 9px}
@@ -543,6 +544,9 @@ body.lsphone .tb.who .e svg{width:22px;height:24px}
 </div>
 <div id="ovl"><div id="ov"></div></div><div id="tutRing"></div><div id="tutCard"></div>
 <script>
+const YT=typeof ytgame!=='undefined'&&!!ytgame.IN_PLAYABLES_ENV;
+const MEM={};let ytLoaded=!YT;
+const ST={get:k=>{if(YT)return MEM[k]==null?null:MEM[k];try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{if(YT){MEM[k]=v;return}try{localStorage.setItem(k,v)}catch(e){}}};
 const NATIVE=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 const CP=NATIVE?window.Capacitor.Plugins:{};
 function __boot(){
@@ -573,7 +577,8 @@ const TOYS={box:{x:118,y:608,cat:{x:118,y:598},n:'cardboard box'},piggy:{x:878,y
 
 /* ---------------- SOUND (synthesised, no files) ---------------- */
 let ac=null,nbuf=null;
-function A(){if(S.muted)return null;const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;if(!ac){try{ac=new C()}catch(e){return null}}if(ac.state==='suspended')ac.resume().catch(()=>{});return ac}
+let ytAudio=true;
+function A(){if(S.muted||(YT&&!ytAudio)||ytPause)return null;const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;if(!ac){try{ac=new C()}catch(e){return null}}if(ac.state==='suspended')ac.resume().catch(()=>{});return ac}
 function noiseSrc(a){if(!nbuf){nbuf=a.createBuffer(1,a.sampleRate*2,a.sampleRate);const d=nbuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}const s=a.createBufferSource();s.buffer=nbuf;s.loop=true;return s}
 function envG(a,t,att,dur,peak){const g=a.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+att);g.gain.exponentialRampToValueAtTime(.0001,t+dur);return g}
 function tone(f0,f1,dur,v=.1,type='sine',delay=0){const a=A();if(!a)return;const t=a.currentTime+delay,o=a.createOscillator(),g=envG(a,t,.01,dur,v);o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+.05)}
@@ -847,13 +852,13 @@ const DEF=()=>({v:1,day:1,min:7*60+30,love:0,friend:40,bowls:{naz:{food:40,water
  owned:[],outfit:{naz:{head:'bow',neck:''},pash:{head:'',neck:''}},decor:{wall:'dots',rug:'pink'},toys:[],lumps:[],lumps2:[],muted:false,gift:false,set:{speed:2,vib:true,motion:false},tut:0,tv:{on:false,ch:0},mess:[],messSeen:{},st:{},stk:{},newStk:0,streak:{d:'',n:0,best:0},bdays:{},bdSeen:{},xb:[1,1,1,1,1,1],today:{love:0,fights:0,care:0},firstCuddle:false});
 let S=DEF();
 let hasSave=false;
-function loadKey(key){try{const s=JSON.parse(localStorage.getItem(key)||'null');if(s&&s.v===1&&s.cats&&s.cats.naz&&s.cats.pash&&typeof s.day==='number')return s}catch(e){}return null}
+function loadKey(key){try{const s=JSON.parse(ST.get(key)||'null');if(s&&s.v===1&&s.cats&&s.cats.naz&&s.cats.pash&&typeof s.day==='number')return s}catch(e){}return null}
 {let s=loadKey('nazpash-v1'),rec=false;if(!s){s=loadKey('nazpash-bak');rec=!!s}
  if(s){const D=DEF();S=Object.assign(D,s);['set','st','stk','streak','bdays','bdSeen','outfit','decor','tv','bowls','today'].forEach(k=>{if(D[k]&&typeof D[k]==='object'&&!Array.isArray(D[k]))S[k]=Object.assign({},DEF()[k],s[k]||{})});
   KEYS.forEach(k=>S.cats[k]=Object.assign(mk(),s.cats[k]));hasSave=true;if(rec)window.__recovered=true}}
 KEYS.forEach(k=>{if(S.cats[k].potty==null)S.cats[k].potty=120});
-let bakT=0;const save=()=>{try{const j=JSON.stringify(S);localStorage.setItem('nazpash-v1',j);if(NATIVE&&CP.Preferences)CP.Preferences.set({key:'nazpash-v1',value:j}).catch(()=>{});if(Date.now()-bakT>60000){bakT=Date.now();localStorage.setItem('nazpash-bak',j);if(NATIVE&&CP.Preferences)CP.Preferences.set({key:'nazpash-bak',value:j}).catch(()=>{})}}catch(e){}};
-document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});window.addEventListener('pagehide',save);
+let bakT=0,ytSaveT=0;const save=(force)=>{try{const j=JSON.stringify(S);ST.set('nazpash-v1',j);if(YT){if(ytLoaded&&(force===true||Date.now()-ytSaveT>8000)){ytSaveT=Date.now();try{const pr=ytgame.game.saveData(j);pr&&pr.catch&&pr.catch(()=>{})}catch(e){}}return}if(NATIVE&&CP.Preferences)CP.Preferences.set({key:'nazpash-v1',value:j}).catch(()=>{});if(Date.now()-bakT>60000){bakT=Date.now();ST.set('nazpash-bak',j);if(NATIVE&&CP.Preferences)CP.Preferences.set({key:'nazpash-bak',value:j}).catch(()=>{})}}catch(e){}};
+if(!YT){document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});window.addEventListener('pagehide',save)}
 const R={};let sel='naz',lastHour=Math.floor(S.min/60);
 const F={active:false},P={active:false},Z={active:false},CU={active:false},PH={active:false};
 const B={x:500,y:545,vx:0,vy:0,rot:0};
@@ -1347,21 +1352,30 @@ function tutTick(){if(TS<0)return;const c=$('#tutCard'),rg=$('#tutRing');if(ovl.
 const enc=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))),dec=t=>JSON.parse(decodeURIComponent(escape(atob(t.trim()))));
 function openSettings(){const st=S.set;
  openOverlay(`<div class="panel small" style="width:600px;max-height:calc(var(--oh,640px) - 24px);overflow:auto"><button class="x" id="mgX">✕</button><h2>⚙️ Settings</h2><div class="setList">
- <div class="setRow"><div class="lbl"><b>🔊 Sound</b><i>Purrs, meows and little blips</i></div><button class="tgl ${S.muted?'':'on'}" data-t="sound"></button></div>
+ <div class="setRow ytHide"><div class="lbl"><b>🔊 Sound</b><i>Purrs, meows and little blips</i></div><button class="tgl ${S.muted?'':'on'}" data-t="sound"></button></div>
  <div class="setRow"><div class="lbl"><b>📳 Vibration</b><i>Tiny buzzes on taps (on supported phones)</i></div><button class="tgl ${st.vib?'on':''}" data-t="vib"></button></div>
  <div class="setRow"><div class="lbl"><b>🌀 Reduce motion</b><i>Fewer animations, no confetti</i></div><button class="tgl ${st.motion?'on':''}" data-t="motion"></button></div>
  <div class="setRow"><div class="lbl"><b>⏱️ Game speed</b><i>How fast the in-game day goes</i></div><div class="seg">${[[1,'🐢 Slow'],[2,'🐱 Normal'],[3,'🐇 Fast']].map(([v,l])=>`<button data-sp="${v}" class="${(st.speed||2)===v?'on':''}">${l}</button>`).join('')}</div></div>
- <div class="setRow" style="flex-direction:column;align-items:stretch"><div class="lbl"><b>💾 Backup code</b><i>Copy this to keep your progress safe, or to move it to another device</i></div><textarea class="codeBox" id="bkOut" readonly></textarea><div style="display:flex;gap:8px"><button class="btn sm" id="bkCopy">📋 Copy code</button><span id="bkMsg" style="font-size:13px;color:#3fa66a;align-self:center"></span></div></div>
- <div class="setRow" style="flex-direction:column;align-items:stretch"><div class="lbl"><b>📥 Restore from code</b><i>Paste a backup code here</i></div><textarea class="codeBox" id="bkIn" placeholder="paste your backup code…"></textarea><div style="display:flex;gap:8px;align-items:center"><button class="btn sm alt" id="bkLoad">Restore</button><span id="bkErr" style="font-size:13px;color:#d93a62"></span></div></div>
+ <div class="setRow ytHide" style="flex-direction:column;align-items:stretch"><div class="lbl"><b>💾 Backup code</b><i>Copy this to keep your progress safe, or to move it to another device</i></div><textarea class="codeBox" id="bkOut" readonly></textarea><div style="display:flex;gap:8px"><button class="btn sm" id="bkCopy">📋 Copy code</button><span id="bkMsg" style="font-size:13px;color:#3fa66a;align-self:center"></span></div></div>
+ <div class="setRow ytHide" style="flex-direction:column;align-items:stretch"><div class="lbl"><b>📥 Restore from code</b><i>Paste a backup code here</i></div><textarea class="codeBox" id="bkIn" placeholder="paste your backup code…"></textarea><div style="display:flex;gap:8px;align-items:center"><button class="btn sm alt" id="bkLoad">Restore</button><span id="bkErr" style="font-size:13px;color:#d93a62"></span></div></div>
  <div class="setRow"><div class="lbl"><b>🗑️ Start over</b><i>Erase all progress (this can’t be undone)</i></div><button class="btn sm ghost" id="rst">Reset…</button></div>
  <p style="font-size:12px;margin-top:4px;text-align:center">Naz &amp; Pash's Cozy Home · made with 💕 · font: Fredoka (OFL)</p></div></div>`);
- save();$('#bkOut').value=enc(S);
+ save();if(!YT)$('#bkOut').value=enc(S);
  ov.querySelectorAll('.tgl').forEach(b=>b.onclick=()=>{const t=b.dataset.t;if(t==='sound'){S.muted=!S.muted;$('#muteBtn').textContent=S.muted?'🔇':'🔊'}else{st[t]=!st[t]}if(t==='motion')document.body.classList.toggle('rm',st.motion);b.classList.toggle('on',t==='sound'?!S.muted:st[t]);SFX.blip();save()});
  ov.querySelectorAll('[data-sp]').forEach(b=>b.onclick=()=>{st.speed=+b.dataset.sp;GS=st.speed;ov.querySelectorAll('[data-sp]').forEach(x=>x.classList.toggle('on',x===b));SFX.blip();save()});
  $('#bkCopy').onclick=()=>{const t=$('#bkOut');t.select();const ok=()=>{$('#bkMsg').textContent='Copied! ✓';SFX.chime()};try{navigator.clipboard.writeText(t.value).then(ok,()=>{document.execCommand('copy');ok()})}catch(e){try{document.execCommand('copy');ok()}catch(_){$('#bkMsg').textContent='Select the text and copy it manually'}}};
- $('#bkLoad').onclick=()=>{try{const o=dec($('#bkIn').value);if(!(o&&o.v===1&&o.cats&&o.cats.naz))throw 0;localStorage.setItem('nazpash-v1',JSON.stringify(o));localStorage.setItem('nazpash-bak',JSON.stringify(o));if(NATIVE&&CP.Preferences){CP.Preferences.set({key:'nazpash-v1',value:JSON.stringify(o)});CP.Preferences.set({key:'nazpash-bak',value:JSON.stringify(o)})}$('#bkErr').style.color='#3fa66a';$('#bkErr').textContent='Restored! Reloading…';setTimeout(()=>location.reload(),700)}catch(e){$('#bkErr').textContent='That code doesn’t look right — try copying it again.'}};
+ $('#bkLoad').onclick=()=>{try{const o=dec($('#bkIn').value);if(!(o&&o.v===1&&o.cats&&o.cats.naz))throw 0;ST.set('nazpash-v1',JSON.stringify(o));ST.set('nazpash-bak',JSON.stringify(o));if(NATIVE&&CP.Preferences){CP.Preferences.set({key:'nazpash-v1',value:JSON.stringify(o)});CP.Preferences.set({key:'nazpash-bak',value:JSON.stringify(o)})}$('#bkErr').style.color='#3fa66a';$('#bkErr').textContent='Restored! Reloading…';setTimeout(()=>location.reload(),700)}catch(e){$('#bkErr').textContent='That code doesn’t look right — try copying it again.'}};
  $('#rst').onclick=()=>{const b=$('#rst');if(b.dataset.sure){closeOverlay();welcome(false);setTimeout(()=>{const n=$('#wNew');if(n)n.click()},50)}else{b.dataset.sure=1;b.textContent='Tap again to erase';b.style.background='#ff6f8a';b.style.color='#fff'}};
 }
+
+/* ---------------- YOUTUBE PLAYABLES ---------------- */
+function ytInit(){document.body.classList.add('yt');
+ try{ytAudio=ytgame.system.isAudioEnabled()}catch(e){}
+ try{ytgame.system.onAudioEnabledChange(on=>{ytAudio=!!on;try{if(ac){on?ac.resume():ac.suspend()}}catch(e){}})}catch(e){}
+ try{ytgame.system.onPause(()=>{save(true);ytPause=true;paused=true;try{ac&&ac.suspend()}catch(e){}})}catch(e){}
+ try{ytgame.system.onResume(()=>{ytPause=false;paused=ovl.classList.contains('show');last=performance.now();try{ac&&ytAudio&&ac.resume()}catch(e){}requestAnimationFrame(loop)})}catch(e){}
+}
+function ytReady(){if(!YT||ytReady.done)return;ytReady.done=1;try{ytgame.game.gameReady()}catch(e){}}
 
 /* ---------------- WATCHDOG ---------------- */
 let wdT=0;
@@ -1916,7 +1930,7 @@ function startPhoto(){if(F.active||Z.active){toast('Not now — the kitties are 
 function endPhoto(){PH.active=false;wrap.classList.remove('photo');$('#photo').classList.remove('on');document.querySelectorAll('.stk').forEach(s=>s.remove());paused=false;KEYS.forEach(k=>R[k].cls='');SFX.blip()}
 
 /* Welcome */
-function welcome(help){
+function welcome(help){setTimeout(ytReady,0);
  openOverlay(`<div class="panel welcome"><h2 style="font-size:30px">🏡 Naz &amp; Pash's Cozy Home</h2><p>Take care of the two kitties in their apartment!</p>
  <div class="wcats"><div><span style="display:block;transform:scale(.84);transform-origin:50% 100%">${catSVG('naz','blep')}</span>Nazbanoo 🎀</div><div>${catSVG('pash','happy')}Pashmak 🧡</div></div>
  <ul><li>Tap a kitty to pick them, tap again to pet 💕</li><li>💭 Each morning, check their dream bubble — serve exactly that for breakfast (or they get mad — a treat 🍣 makes up for it)</li><li>😼 Pash steals Banoo’s food — tap him to shoo him!</li><li>🥣 Tap a food bowl &amp; pick the right dry food (Persian Kitty or Turkish Van) · 💧 tap water bowls to fill</li><li>🧹 Scoop litter lumps · 🌀 vacuum shed fur · 🧽 mop Pash’s splashes · sweep stray litter</li><li>✨ Fluffy tufts sticking out = time to brush!</li><li>✨ Brush, 🛁 bathe &amp; ✂️ trim nails · 🩺 vet checkup every 2 months</li><li>🤒 If a kitty acts strange, 📞 call the vet (costs 💗)</li><li>🪪 Check their passports · 🪟 they love watching the street</li><li>💥 Fights! Tap the cloud fast to stop them</li><li>💨 Pash gets zoomies — tap him to catch him</li><li>🐱💞🐱 Grow their friendship until they cuddle</li><li>🛍️ Spend 💗 on treats, toys, decor &amp; outfits</li><li>🔴 Laser pointer — both kitties chase it!</li><li>🛏️🛁 Swipe or tap the ‹ › arrows to visit the bedroom &amp; bathroom — and play hide &amp; seek when a kitty hides!</li><li>📒 Collect stickers &amp; keep your 🔥 daily streak · 🎄🎂 seasons, holidays &amp; birthdays</li><li>🍳 Breakfast is prepped in the kitchen — the kitties beg at the counter!</li><li>📺 Turn on the TV — tap it to change channel</li><li>📸 Photo mode with stickers · 🛏️ tuck in at night</li></ul>
@@ -2016,22 +2030,29 @@ function render(){updCam();tutTick();watchdog();
  if(now>uiT){uiT=now+.3;updUI()}
 }
 let last=performance.now(),saveT=0;
-function loop(t){const dt=Math.min(.1,(t-last)/1000);frameDt=dt;last=t;now+=dt;if(!paused)tick(dt);render();if(now>saveT){saveT=now+4;save()}requestAnimationFrame(loop)}
+let ytPause=false;
+function loop(t){if(ytPause){last=t;return}const dt=Math.min(.1,(t-last)/1000);frameDt=dt;last=t;now+=dt;if(!paused)tick(dt);render();if(now>saveT){saveT=now+4;save()}requestAnimationFrame(loop)}
 function fitOv(){const vw=innerWidth,vh=innerHeight,por=vw<700&&vh>vw;let OW,OH;
  if(por){OW=560;KO=vw/OW;OH=vh/KO}else{OW=1000;OH=640;KO=Math.min(vw/OW,vh/OH,1.12);OH=Math.max(OH,vh/KO)}
  ov.style.width=OW+'px';ov.style.height=OH+'px';ov.style.transform=`scale(${KO})`;ov.style.left=((vw-OW*KO)/2)+'px';ov.style.top=((vh-OH*KO)/2)+'px';ov.style.setProperty('--oh',OH+'px');ovl.classList.toggle('portrait',por)}
-function fit(){const vw=innerWidth,vh=innerHeight,phone=vw<700&&vh>vw,ls=!phone&&vh<520&&vw<1100,tab=!phone&&vh>vw&&vw<1100;
- document.body.classList.toggle('phone',phone);document.body.classList.toggle('tab',tab);document.body.classList.toggle('lsphone',ls);
- const AW=$('#stageBox').clientWidth;VW=1000;if(phone)VW=600;else if(tab){const avH=vh-$('header').offsetHeight-$('#cards').offsetHeight-$('#toolbar').offsetHeight-48;VW=clamp(Math.round(620*AW/avH),700,1000)}let k=AW/VW;
- if(ls){const AH=vh-$('header').offsetHeight-$('#toolbar').offsetHeight-22;k=Math.min(k,AH/620)}
+function fit(){const vw=innerWidth,vh=innerHeight;if(!vw||!vh)return;const phone=vw<700&&vh>vw;let mode='desk';
+ if(!phone){const need=64+190+Math.min(1040,vw-20)*.62+84;if(need>vh)mode=vw/vh>=1.2?'ls':'tab';else if(vh>vw&&vw<1100)mode='tab'}
+ const B=document.body;B.classList.toggle('phone',phone);B.classList.toggle('tab',mode==='tab');B.classList.toggle('lsphone',mode==='ls');
+ const AW=$('#stageBox').clientWidth;VW=1000;let k;
+ if(phone){VW=600;k=AW/VW}
+ else if(mode==='tab'){const avH=Math.max(200,vh-$('header').offsetHeight-$('#cards').offsetHeight-$("#toolbar").offsetHeight-62);VW=clamp(Math.round(620*AW/avH),700,1000);k=Math.min(AW/VW,avH/620)}
+ else if(mode==='ls'){const AH=vh-$('header').offsetHeight-$('#toolbar').offsetHeight-22;k=Math.min(AW/1000,AH/620)}
+ else k=AW/1000;
  K=k;wrap.style.width=(VW*K)+'px';wrap.style.height=(620*K)+'px';if(VW>=1000)camX=0;else camX=clamp(camX,0,1000-VW);applyCam();fitOv()}
 window.addEventListener('resize',fit);window.addEventListener('orientationchange',()=>setTimeout(fit,250));if(window.visualViewport)visualViewport.addEventListener('resize',fit);
 document.addEventListener('pointerdown',()=>A(),{once:true});
 
-GS=S.set.speed||2;document.body.classList.toggle('rm',!!S.set.motion);doStreak();buildRoom();buildProps();buildUI();setTimeout(checkStickers,1500);select('naz');fit();welcome(false);requestAnimationFrame(loop);setTimeout(fit,300);if(document.fonts)document.fonts.ready.then(fit);
+GS=S.set.speed||2;document.body.classList.toggle('rm',!!S.set.motion);doStreak();buildRoom();buildProps();buildUI();setTimeout(checkStickers,1500);if(YT)ytInit();select('naz');fit();welcome(false);requestAnimationFrame(loop);setTimeout(fit,300);if(document.fonts)document.fonts.ready.then(fit);
 }
 /* native: pull the save from the phone's own storage (safer than browser storage) before starting */
 if(NATIVE&&CP.Preferences){Promise.all(['nazpash-v1','nazpash-bak'].map(k=>CP.Preferences.get({key:k}).then(r=>{if(r&&r.value){try{if(!localStorage.getItem(k)||JSON.parse(r.value).day>=JSON.parse(localStorage.getItem(k)||'{"day":0}').day)localStorage.setItem(k,r.value)}catch(e){localStorage.setItem(k,r.value)}}}).catch(()=>{}))).then(__boot,__boot);try{CP.SplashScreen&&setTimeout(()=>CP.SplashScreen.hide(),400);CP.StatusBar&&CP.StatusBar.setOverlaysWebView({overlay:true})}catch(e){}}
+else if(YT){try{ytgame.game.firstFrameReady()}catch(e){}
+ Promise.resolve().then(()=>ytgame.game.loadData()).then(d=>{if(d&&typeof d==='string'&&d.length>2){MEM['nazpash-v1']=d;MEM['nazpash-bak']=d}}).catch(()=>{}).then(()=>{ytLoaded=true;__boot()})}
 else __boot();
 </script>
 </body>
